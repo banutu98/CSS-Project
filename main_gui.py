@@ -1,10 +1,9 @@
 import pygame as pg
 import pygame.colordict as pg_colors
 
-from gui_components.plot_menu import PlotMenu
-from gui_components.draw_screen import DrawScreen
-
-SCREEN_SIZE = (800, 600)
+from gui_components.defines import *
+from gui_components.PlotMenu import PlotMenu
+from gui_components.DrawScreen import DrawScreen
 
 
 def draw_graph(screen, points):
@@ -14,14 +13,14 @@ def draw_graph(screen, points):
 
 def init_screen():
     screen = pg.display.set_mode(SCREEN_SIZE)
-    pg.display.set_caption('Plot Master v1.1')
+    pg.display.set_caption(WINDOW_TITLE)
     icon = pg.image.load('resources/bar-chart.png')
     pg.display.set_icon(icon)
 
     menu = PlotMenu(SCREEN_SIZE, screen)
-    menu.add_element('Plot Master', 60, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 6))
-    menu.add_button('Draw graph!', 30, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] - 175))
-    menu.add_button('Exit', 30, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] - 100))
+    menu.add_element(MENU_TITLE, 60, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 6))
+    menu.add_button(DRAW_BUTTON_NAME, 30, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] - 175))
+    menu.add_button(EXIT_BUTTON_NAME, 30, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] - 100))
     return menu
 
 
@@ -42,14 +41,14 @@ def start_gui():
                 mouse_pos = event.pos
                 for button in menu.buttons:
                     if button.rect.collidepoint(mouse_pos):
-                        if button.name == 'Exit':
+                        if button.name == EXIT_BUTTON_NAME:
                             exit()
                         else:
                             intro = False
                             graph_drawing = True
         menu.draw()
     if graph_drawing:
-        DrawScreen().run()  # TODO: Needs implementation
+        DrawScreen().run()
 
 
 if __name__ == '__main__':
