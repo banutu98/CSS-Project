@@ -15,10 +15,10 @@ class BoolMenuElement:
 
     def draw(self):
         c_text = self.text + self.bool_value[self.value]
-        c_eleme_surface, c_elem_rect = PlotMenu.get_text_objects(c_text,
-                                                                 PlotMenu.get_font(self.font_size, self.font_name))
+        c_elem_surface, c_elem_rect = PlotMenu.get_text_objects(c_text,
+                                                                PlotMenu.get_font(self.font_size, self.font_name))
         c_elem_rect.center = self.center_location
-        self.game_display.blit(c_eleme_surface, c_elem_rect)
+        self.game_display.blit(c_elem_surface, c_elem_rect)
 
     def change_bool_value(self, value):
         self.value = value
@@ -45,20 +45,20 @@ class PlotMenu:
         text_surface = font.render(text, True, pg.color.THECOLORS['black'])
         return text_surface, text_surface.get_rect()
 
-    def add_alement(self, text, font_size, center_location, font_name='freesansbold.ttf', bool_name=None,
+    def add_element(self, text, font_size, center_location, font_name='freesansbold.ttf', bool_name=None,
                     bool_value=None):
         if bool_name:
             self.bool_element = BoolMenuElement(text, font_size, center_location, font_name, bool_name, bool_value,
                                                 self.game_display)
         else:
-            c_eleme_surface, c_elem_rect = self.get_text_objects(text, self.get_font(font_size, font_name))
+            c_elem_surface, c_elem_rect = self.get_text_objects(text, self.get_font(font_size, font_name))
             c_elem_rect.center = center_location
-            self.__static_elements.append((c_eleme_surface, c_elem_rect))
+            self.__static_elements.append((c_elem_surface, c_elem_rect))
 
     def draw(self):
         self.game_display.fill(pg.color.THECOLORS['magenta'])
-        for c_eleme_surface, c_elem_rect in self.__static_elements:
-            self.game_display.blit(c_eleme_surface, c_elem_rect)
+        for c_elem_surface, c_elem_rect in self.__static_elements:
+            self.game_display.blit(c_elem_surface, c_elem_rect)
         if self.bool_element:
             self.bool_element.draw()
         pg.display.update()

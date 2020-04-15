@@ -17,7 +17,7 @@ def init_screen():
     pg.display.set_icon(icon)
 
     menu = PlotMenu(SCREEN_SIZE, screen)
-    menu.add_alement('Plot Master', 60, ((SCREEN_SIZE[0] / 2), (SCREEN_SIZE[1] / 6)))
+    menu.add_element('Plot Master', 60, ((SCREEN_SIZE[0] / 2), (SCREEN_SIZE[1] / 6)))
     return menu
 
 
