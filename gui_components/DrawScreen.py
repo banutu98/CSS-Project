@@ -17,22 +17,22 @@ class DrawScreen:
 
     def init_buttons(self):
         font = pg.font.Font(FONT_NAME, 20)
-        text_surface = font.render('Exit', True, pg.color.THECOLORS['black'])
+        text_surface = font.render(EXIT_BUTTON_NAME, True, pg.color.THECOLORS['black'])
         text_location = text_surface.get_rect()
         text_location.center = (750, 570)
-        self.buttons.append(Button('Exit', text_surface, text_location))
+        self.buttons.append(Button(EXIT_BUTTON_NAME, text_surface, text_location))
 
         font = pg.font.Font(FONT_NAME, 20)
-        text_surface = font.render('Export txt', True, pg.color.THECOLORS['black'])
+        text_surface = font.render(EXPORT_TXT_BUTTON_NAME, True, pg.color.THECOLORS['black'])
         text_location = text_surface.get_rect()
         text_location.center = (100, 570)
-        self.buttons.append(Button('Export txt', text_surface, text_location))
+        self.buttons.append(Button(EXPORT_TXT_BUTTON_NAME, text_surface, text_location))
 
         font = pg.font.Font(FONT_NAME, 20)
-        text_surface = font.render('Export png', True, pg.color.THECOLORS['black'])
+        text_surface = font.render(EXPORT_PNG_BUTTON_NAME, True, pg.color.THECOLORS['black'])
         text_location = text_surface.get_rect()
         text_location.center = (300, 570)
-        self.buttons.append(Button('Export png', text_surface, text_location))
+        self.buttons.append(Button(EXPORT_PNG_BUTTON_NAME, text_surface, text_location))
 
     def draw_buttons(self):
         for button in self.buttons:
@@ -45,8 +45,20 @@ class DrawScreen:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     exit()
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        exit()
+                elif event.type == pg.MOUSEBUTTONDOWN:
+                    mouse_pos = event.pos
+                    for button in self.buttons:
+                        if button.rect.collidepoint(mouse_pos):
+                            if button.name == EXIT_BUTTON_NAME:
+                                exit()
+                            elif button.name == EXPORT_TXT_BUTTON_NAME:
+                                print('Export txt!')
+                            elif button.name == EXPORT_PNG_BUTTON_NAME:
+                                print('Export png!')
 
-            # TODO: Draw buttons and textbox elements here
             self.draw_buttons()
             pg.display.update()
             self.clock.tick(30)

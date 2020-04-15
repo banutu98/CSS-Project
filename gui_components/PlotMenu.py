@@ -1,4 +1,3 @@
-import os
 import pygame as pg
 
 from gui_components.defines import *
@@ -11,7 +10,7 @@ class PlotMenu:
             self.plot_display = plot_display
         else:
             self.plot_display = pg.display.set_mode(screen_size)
-            self.plot_display.fill(pg.color.THECOLORS['magenta'])
+            self.plot_display.fill(pg.color.THECOLORS['darkslategray'])
         self.__static_elements = []
         self.buttons = []
         self.screen_size = screen_size
@@ -37,7 +36,7 @@ class PlotMenu:
         self.buttons.append(Button(text, c_elem_surface, c_elem_rect))
 
     def draw(self):
-        self.plot_display.fill(pg.color.THECOLORS['magenta'])
+        self.plot_display.fill(pg.color.THECOLORS['darkslategray'])
         for c_elem_surface, c_elem_rect in self.__static_elements:
             self.plot_display.blit(c_elem_surface, c_elem_rect)
         for button in self.buttons:
