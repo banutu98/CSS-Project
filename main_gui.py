@@ -1,6 +1,8 @@
 import pygame as pg
 import pygame.colordict as pg_colors
+
 from gui_components.plot_menu import PlotMenu
+from gui_components.draw_screen import DrawScreen
 
 SCREEN_SIZE = (800, 600)
 
@@ -27,8 +29,9 @@ def start_gui():
     pg.init()
     menu = init_screen()
 
-    running = True
-    while running:
+    intro = True
+    graph_drawing = False
+    while intro:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 exit()
@@ -42,8 +45,11 @@ def start_gui():
                         if button.name == 'Exit':
                             exit()
                         else:
-                            print('Button functionality not implemented!')
+                            intro = False
+                            graph_drawing = True
         menu.draw()
+    if graph_drawing:
+        DrawScreen().run()  # TODO: Needs implementation
 
 
 if __name__ == '__main__':
