@@ -17,7 +17,9 @@ def init_screen():
     pg.display.set_icon(icon)
 
     menu = PlotMenu(SCREEN_SIZE, screen)
-    menu.add_element('Plot Master', 60, ((SCREEN_SIZE[0] / 2), (SCREEN_SIZE[1] / 6)))
+    menu.add_element('Plot Master', 60, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 6))
+    menu.add_button('Draw graph!', 30, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] - 175))
+    menu.add_button('Exit', 30, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] - 100))
     return menu
 
 
@@ -28,11 +30,19 @@ def start_gui():
     running = True
     while running:
         for event in pg.event.get():
-            if event.type == pg.KEYDOWN:
+            if event.type == pg.QUIT:
+                exit()
+            elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     exit()
-            elif event.type == pg.QUIT:
-                exit()
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                mouse_pos = event.pos
+                for button in menu.buttons:
+                    if button.rect.collidepoint(mouse_pos):
+                        if button.name == 'Exit':
+                            exit()
+                        else:
+                            print('Button functionality not implemented!')
         menu.draw()
 
 
