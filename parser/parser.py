@@ -1,5 +1,7 @@
 import re
 from math import cos, sin
+
+
 # from .api import *
 
 # from math import cos, sin
@@ -8,10 +10,10 @@ from math import cos, sin
 def cartof(x):
     return x * 5
 
+
 allowed_functions = [cos, sin, cartof]
 allowed_operators = ['+', '-', '/', '*', '**', '(', ')']
 allowed_variables = ['x']
-
 
 # allowed_functions = [cos, sin, cartof]
 # allowed_operators = ['+', '-', '/', '*', '**', '(', ')']
