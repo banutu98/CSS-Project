@@ -18,7 +18,7 @@ class DrawScreen:
         font = pg.font.Font(FONT_NAME, 20)
         text_surface = font.render(EXIT_BUTTON_NAME, True, pg.color.THECOLORS['black'])
         text_location = text_surface.get_rect()
-        text_location.center = (750, 570)
+        text_location.center = (730, 570)
         self.buttons.append(Button(EXIT_BUTTON_NAME, text_surface, text_location))
 
         font = pg.font.Font(FONT_NAME, 20)
@@ -32,6 +32,12 @@ class DrawScreen:
         text_location = text_surface.get_rect()
         text_location.center = (300, 570)
         self.buttons.append(Button(EXPORT_PNG_BUTTON_NAME, text_surface, text_location))
+
+        font = pg.font.Font(FONT_NAME, 20)
+        text_surface = font.render(GENERATE_GRAPH_BUTTON_NAME, True, pg.color.THECOLORS['black'])
+        text_location = text_surface.get_rect()
+        text_location.center = (530, 570)
+        self.buttons.append(Button(GENERATE_GRAPH_BUTTON_NAME, text_surface, text_location))
 
     def draw_buttons(self):
         for button in self.buttons:
@@ -55,6 +61,8 @@ class DrawScreen:
                         if button.rect.collidepoint(mouse_pos):
                             if button.name == EXIT_BUTTON_NAME:
                                 exit()
+                            elif button.name == GENERATE_GRAPH_BUTTON_NAME:
+                                print('Generate graph!')
                             elif button.name == EXPORT_TXT_BUTTON_NAME:
                                 print('Export txt!')
                             elif button.name == EXPORT_PNG_BUTTON_NAME:
