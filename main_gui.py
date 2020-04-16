@@ -1,4 +1,3 @@
-import pygame as pg
 import pygame.colordict as pg_colors
 
 from gui_components.defines import *

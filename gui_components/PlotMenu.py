@@ -1,5 +1,3 @@
-import pygame as pg
-
 from gui_components.defines import *
 from gui_components.utils import Button
 

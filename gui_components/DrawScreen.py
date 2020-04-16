@@ -1,7 +1,5 @@
-import pygame as pg
-
 from gui_components.defines import *
-from gui_components.utils import Button
+from gui_components.utils import Button, TextInput
 
 
 class DrawScreen:
@@ -14,6 +12,7 @@ class DrawScreen:
 
         self.clock = pg.time.Clock()
         self.buttons = []
+        self.text_box = TextInput(font_family=TEXTBOX_FONT_NAME, font_size=20, clock=self.clock)
 
     def init_buttons(self):
         font = pg.font.Font(FONT_NAME, 20)
@@ -42,7 +41,9 @@ class DrawScreen:
         self.init_buttons()
         while True:
             self.screen.fill(pg.color.THECOLORS['white'])
-            for event in pg.event.get():
+
+            events = pg.event.get()
+            for event in events:
                 if event.type == pg.QUIT:
                     exit()
                 elif event.type == pg.KEYDOWN:
@@ -59,6 +60,9 @@ class DrawScreen:
                             elif button.name == EXPORT_PNG_BUTTON_NAME:
                                 print('Export png!')
 
+            self.text_box.update(events)
+            self.screen.blit(self.text_box.get_surface(), (10, 10))
             self.draw_buttons()
+
             pg.display.update()
             self.clock.tick(30)
