@@ -14,6 +14,10 @@ class DrawScreen:
         self.buttons = []
         self.text_box = TextInput(font_family=TEXTBOX_FONT_NAME, font_size=20, clock=self.clock)
 
+    def draw_graph(self, points):
+        for i in range(len(points) - 1):
+            pg.draw.line(self.screen, pg.color.THECOLORS['red'], points[i], points[i + 1])
+
     def init_buttons(self):
         font = pg.font.Font(FONT_NAME, 20)
         text_surface = font.render(EXIT_BUTTON_NAME, True, pg.color.THECOLORS['black'])
@@ -71,6 +75,7 @@ class DrawScreen:
             self.text_box.update(events)
             self.screen.blit(self.text_box.get_surface(), (10, 10))
             self.draw_buttons()
+            self.draw_graph([(10, 32), (50, 60), (78, 80)])
 
             pg.display.update()
             self.clock.tick(30)

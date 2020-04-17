@@ -1,13 +1,6 @@
-import pygame.colordict as pg_colors
-
 from gui_components.defines import *
 from gui_components.PlotMenu import PlotMenu
 from gui_components.DrawScreen import DrawScreen
-
-
-def draw_graph(screen, points):
-    for i in range(len(points) - 1):
-        pg.draw.line(screen, pg_colors.THECOLORS['red'], points[i], points[i + 1])
 
 
 def init_screen():
