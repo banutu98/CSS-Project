@@ -5,10 +5,26 @@ from gui_components.defines import *
 
 class Button:
 
-    def __init__(self, name, surface, rect):
+    def __init__(self, name, surface, rect, border_width=None):
         self.name = name
         self.surface = surface
         self.rect = rect
+        self.border_width = border_width
+
+    def draw_border(self, surface, color):
+        distancing = self.border_width + self.border_width // 2
+        # top line
+        pg.draw.rect(surface, color, [self.rect.left - distancing, self.rect.top - distancing,
+                                      self.rect.width + distancing * 2, self.border_width])
+        # bottom line
+        pg.draw.rect(surface, color, [self.rect.left - distancing, self.rect.bottom,
+                                      self.rect.width + distancing * 2, self.border_width])
+        # left line
+        pg.draw.rect(surface, color, [self.rect.left - distancing, self.rect.top - distancing,
+                                      self.border_width, self.rect.height + distancing])
+        # right line
+        pg.draw.rect(surface, color, [self.rect.right + self.border_width / 2, self.rect.top - distancing / 2,
+                                      self.border_width, self.rect.height + distancing])
 
 
 class TextInput:
@@ -61,16 +77,16 @@ class TextInput:
 
                 if event.key == pl.K_BACKSPACE:
                     self.input_string = (
-                        self.input_string[:max(self.cursor_position - 1, 0)]
-                        + self.input_string[self.cursor_position:]
+                            self.input_string[:max(self.cursor_position - 1, 0)]
+                            + self.input_string[self.cursor_position:]
                     )
 
                     # Subtract one from cursor_pos, but do not go below zero:
                     self.cursor_position = max(self.cursor_position - 1, 0)
                 elif event.key == pl.K_DELETE:
                     self.input_string = (
-                        self.input_string[:self.cursor_position]
-                        + self.input_string[self.cursor_position + 1:]
+                            self.input_string[:self.cursor_position]
+                            + self.input_string[self.cursor_position + 1:]
                     )
 
                 elif event.key == pl.K_RETURN:
@@ -93,9 +109,9 @@ class TextInput:
                 elif len(self.input_string) < self.max_string_length or self.max_string_length == -1:
                     # If no special key is pressed, add unicode of key to input_string
                     self.input_string = (
-                        self.input_string[:self.cursor_position]
-                        + event.unicode
-                        + self.input_string[self.cursor_position:]
+                            self.input_string[:self.cursor_position]
+                            + event.unicode
+                            + self.input_string[self.cursor_position:]
                     )
                     self.cursor_position += len(event.unicode)  # Some are empty, e.g. K_UP
 
@@ -111,8 +127,8 @@ class TextInput:
             # Generate new key events if enough time has passed:
             if self.key_repeat_counters[key][0] >= self.key_repeat_initial_interval_ms:
                 self.key_repeat_counters[key][0] = (
-                    self.key_repeat_initial_interval_ms
-                    - self.key_repeat_interval_ms
+                        self.key_repeat_initial_interval_ms
+                        - self.key_repeat_interval_ms
                 )
 
                 event_key, event_unicode = key, self.key_repeat_counters[key][1]

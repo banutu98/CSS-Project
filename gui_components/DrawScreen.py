@@ -14,38 +14,28 @@ class DrawScreen:
         self.buttons = []
         self.text_box = TextInput(font_family=TEXTBOX_FONT_NAME, font_size=20, clock=self.clock)
 
+    def add_button(self, font_name, font_size, button_name, text_color, center_location):
+        font = pg.font.Font(font_name, font_size)
+        text_surface = font.render(button_name, True, text_color)
+        text_location = text_surface.get_rect()
+        text_location.center = center_location
+        self.buttons.append(Button(button_name, text_surface, text_location, border_width=5))
+
     def draw_graph(self, points):
         for i in range(len(points) - 1):
             pg.draw.line(self.screen, pg.color.THECOLORS['red'], points[i], points[i + 1])
 
     def init_buttons(self):
-        font = pg.font.Font(FONT_NAME, 20)
-        text_surface = font.render(EXIT_BUTTON_NAME, True, pg.color.THECOLORS['black'])
-        text_location = text_surface.get_rect()
-        text_location.center = (730, 570)
-        self.buttons.append(Button(EXIT_BUTTON_NAME, text_surface, text_location))
-
-        font = pg.font.Font(FONT_NAME, 20)
-        text_surface = font.render(EXPORT_TXT_BUTTON_NAME, True, pg.color.THECOLORS['black'])
-        text_location = text_surface.get_rect()
-        text_location.center = (100, 570)
-        self.buttons.append(Button(EXPORT_TXT_BUTTON_NAME, text_surface, text_location))
-
-        font = pg.font.Font(FONT_NAME, 20)
-        text_surface = font.render(EXPORT_PNG_BUTTON_NAME, True, pg.color.THECOLORS['black'])
-        text_location = text_surface.get_rect()
-        text_location.center = (300, 570)
-        self.buttons.append(Button(EXPORT_PNG_BUTTON_NAME, text_surface, text_location))
-
-        font = pg.font.Font(FONT_NAME, 20)
-        text_surface = font.render(GENERATE_GRAPH_BUTTON_NAME, True, pg.color.THECOLORS['black'])
-        text_location = text_surface.get_rect()
-        text_location.center = (530, 570)
-        self.buttons.append(Button(GENERATE_GRAPH_BUTTON_NAME, text_surface, text_location))
+        self.add_button(FONT_NAME, 20, EXIT_BUTTON_NAME, pg.color.THECOLORS['black'], (730, 570))
+        self.add_button(FONT_NAME, 20, EXPORT_TXT_BUTTON_NAME, pg.color.THECOLORS['black'], (100, 570))
+        self.add_button(FONT_NAME, 20, EXPORT_PNG_BUTTON_NAME, pg.color.THECOLORS['black'], (300, 570))
+        self.add_button(FONT_NAME, 20, GENERATE_GRAPH_BUTTON_NAME, pg.color.THECOLORS['black'], (530, 570))
 
     def draw_buttons(self):
         for button in self.buttons:
             self.screen.blit(button.surface, button.rect)
+            if button.border_width:
+                button.draw_border(self.screen, pg.color.THECOLORS['black'])
 
     def run(self):
         self.init_buttons()
@@ -75,7 +65,7 @@ class DrawScreen:
             self.text_box.update(events)
             self.screen.blit(self.text_box.get_surface(), (10, 10))
             self.draw_buttons()
-            self.draw_graph([(10, 32), (50, 60), (78, 80)])
+            # self.draw_graph([(10, 32), (50, 60), (78, 80)])
 
             pg.display.update()
             self.clock.tick(30)

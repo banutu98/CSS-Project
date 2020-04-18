@@ -31,13 +31,16 @@ class PlotMenu:
     def add_button(self, text, font_size, center_location, font_name=FONT_NAME):
         c_elem_surface, c_elem_rect = self.get_text_objects(text, self.get_font(font_size, font_name))
         c_elem_rect.center = center_location
-        self.buttons.append(Button(text, c_elem_surface, c_elem_rect))
+        self.buttons.append(Button(text, c_elem_surface, c_elem_rect, border_width=5))
 
     def draw(self):
-        self.plot_display.fill(pg.color.THECOLORS['darkslategray'])
+        self.plot_display.fill(pg.color.THECOLORS['aquamarine3'])
         for c_elem_surface, c_elem_rect in self.__static_elements:
             self.plot_display.blit(c_elem_surface, c_elem_rect)
         for button in self.buttons:
             self.plot_display.blit(button.surface, button.rect)
+            if button.border_width:
+                button.draw_border(self.plot_display, pg.color.THECOLORS['black'])
+
         pg.display.update()
         self.clock.tick(30)
