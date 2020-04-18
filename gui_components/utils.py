@@ -29,8 +29,9 @@ class Button:
 
 class InputBox:
 
-    def __init__(self, screen, x, y, w, h, text='', text_color=pg.color.THECOLORS['black'],
+    def __init__(self, name, screen, x, y, w, h, text='', text_color=pg.color.THECOLORS['black'],
                  font_size=20, max_string_length=-1):
+        self.name = name
         self.screen = screen
         self.rect = pg.Rect(x, y, w, h)
         self.color = TEXTBOX_INACTIVE_COLOR
