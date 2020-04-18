@@ -11,5 +11,5 @@ EXPORT_PNG_BUTTON_NAME = 'Export png'
 GENERATE_GRAPH_BUTTON_NAME = 'Generate Graph'
 FONT_NAME = os.path.join(os.getcwd(), 'resources', 'handwriting.ttf')
 TEXTBOX_FONT_NAME = os.path.join(os.getcwd(), 'resources', 'NixieOne.ttf')
-TEXTBOX_INACTIVE_COLOR = pg.color.THECOLORS['lightskyblue3']
-TEXTBOX_ACTIVE_COLOR = pg.color.THECOLORS['dodgerblue2']
+TEXTBOX_INACTIVE_COLOR = pg.color.THECOLORS['black']
+TEXTBOX_ACTIVE_COLOR = pg.color.THECOLORS['darkcyan']

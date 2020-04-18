@@ -1,5 +1,5 @@
 from gui_components.defines import *
-from gui_components.utils import Button, TextInput
+from gui_components.utils import Button, InputBox
 
 
 class DrawScreen:
@@ -12,7 +12,7 @@ class DrawScreen:
 
         self.clock = pg.time.Clock()
         self.buttons = []
-        self.text_box = TextInput(font_family=TEXTBOX_FONT_NAME, font_size=20, clock=self.clock)
+        self.text_box = InputBox(self.screen, 10, 10, 100, 32, max_string_length=70)
 
     def add_button(self, font_name, font_size, button_name, text_color, center_location):
         font = pg.font.Font(font_name, font_size)
@@ -40,7 +40,7 @@ class DrawScreen:
     def run(self):
         self.init_buttons()
         while True:
-            self.screen.fill(pg.color.THECOLORS['white'])
+            self.screen.fill(pg.color.THECOLORS['aquamarine3'])
 
             events = pg.event.get()
             for event in events:
@@ -61,9 +61,10 @@ class DrawScreen:
                                 print('Export txt!')
                             elif button.name == EXPORT_PNG_BUTTON_NAME:
                                 print('Export png!')
+                self.text_box.handle_event(event)
 
-            self.text_box.update(events)
-            self.screen.blit(self.text_box.get_surface(), (10, 10))
+            self.text_box.update()
+            self.text_box.draw()
             self.draw_buttons()
             # self.draw_graph([(10, 32), (50, 60), (78, 80)])
 
