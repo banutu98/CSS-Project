@@ -33,10 +33,10 @@ expressions = ['vasile(2+x)+5', 'x+1+2+3/5*6', 'sin(0*2)+3', 'cos(x)*5', 'cartof
 
 def _check_res(expression, x):
     try:
-        return eval(expression), True
+        return True, eval(expression)
     except Exception as e:
         print(e)
-        return 0, False
+        return False, 0
 
 
 def check_expression_validity(expression: str, x: float) -> (bool, int):
@@ -49,6 +49,10 @@ def check_expression_validity(expression: str, x: float) -> (bool, int):
                     return False, 0
 
     return _check_res(expression, x)
+
+
+def check_expression_is_number(expression: str):
+    return expression.isnumeric()
 
 
 if __name__ == '__main__':
