@@ -2,9 +2,11 @@ import os
 import pygame as pg
 
 SCREEN_SIZE = (800, 600)
-WINDOW_TITLE = 'Plot Master v1.1'
-MENU_TITLE = 'Plot Master'
+WINDOW_TITLE = 'PlotMaster v1.1'
+MENU_TITLE = 'PlotMaster'
 EXIT_BUTTON_NAME = 'Exit'
+INSTRUCTIONS_BUTTON_NAME = 'Instructions'
+BACK_BUTTON_NAME = 'Go back'
 DRAW_BUTTON_NAME = 'Draw graph!'
 EXPORT_TXT_BUTTON_NAME = 'Export txt'
 EXPORT_PNG_BUTTON_NAME = 'Export png'

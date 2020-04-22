@@ -10,9 +10,9 @@ def init_screen():
     pg.display.set_icon(icon)
 
     menu = PlotMenu(SCREEN_SIZE, screen)
-    menu.add_element(MENU_TITLE, 60, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 6))
-    menu.add_button(DRAW_BUTTON_NAME, 30, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] - 175))
-    menu.add_button(EXIT_BUTTON_NAME, 30, (SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] - 100))
+    menu.add_element(MENU_TITLE, 60, (SCREEN_SIZE[0] // 2, SCREEN_SIZE[1] // 6))
+    menu.add_button(DRAW_BUTTON_NAME, 30, (SCREEN_SIZE[0] // 2, SCREEN_SIZE[1] - 150))
+    menu.add_button(EXIT_BUTTON_NAME, 30, (SCREEN_SIZE[0] // 2, SCREEN_SIZE[1] - 75))
     return menu
 
 
@@ -22,25 +22,28 @@ def start_gui():
 
     intro = True
     graph_drawing = False
-    while intro:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                exit()
-            elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_ESCAPE:
+    while True:
+        while intro:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
                     exit()
-            elif event.type == pg.MOUSEBUTTONDOWN:
-                mouse_pos = event.pos
-                for button in menu.buttons:
-                    if button.rect.collidepoint(mouse_pos):
-                        if button.name == EXIT_BUTTON_NAME:
-                            exit()
-                        else:
-                            intro = False
-                            graph_drawing = True
-        menu.draw()
-    if graph_drawing:
-        DrawScreen().run()
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        exit()
+                elif event.type == pg.MOUSEBUTTONDOWN:
+                    mouse_pos = event.pos
+                    for button in menu.buttons:
+                        if button.rect.collidepoint(mouse_pos):
+                            if button.name == EXIT_BUTTON_NAME:
+                                exit()
+                            elif button.name == DRAW_BUTTON_NAME:
+                                intro = False
+                                graph_drawing = True
+            menu.draw()
+        if graph_drawing:
+            DrawScreen().run()
+        intro = True
+        graph_drawing = False
 
 
 if __name__ == '__main__':

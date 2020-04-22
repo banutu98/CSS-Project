@@ -2,6 +2,7 @@ from gui_components.defines import *
 from gui_components.utils import Button, InputBox
 from enum import Enum
 from gui_components import parser
+from gui_components.InstructionsScreen import InstructionsScreen
 
 
 class TextBoxesIDs(Enum):
@@ -36,6 +37,7 @@ class DrawScreen:
 
     def init_buttons(self):
         self.add_button(FONT_NAME, 20, EXIT_BUTTON_NAME, pg.color.THECOLORS['black'], (730, 570))
+        self.add_button(FONT_NAME, 20, INSTRUCTIONS_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 570))
         self.add_button(FONT_NAME, 20, EXPORT_TXT_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 370))
         self.add_button(FONT_NAME, 20, EXPORT_PNG_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 320))
         self.add_button(FONT_NAME, 20, GENERATE_GRAPH_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 270))
@@ -106,38 +108,49 @@ class DrawScreen:
         self.init_buttons()
         self.init_texts()
         self.init_text_boxes()
+
+        graph_drawing = True
+        instructions = False
         while True:
-            self.screen.fill(pg.color.THECOLORS['aquamarine3'])
+            while graph_drawing:
+                self.screen.fill(pg.color.THECOLORS['aquamarine3'])
 
-            events = pg.event.get()
-            for event in events:
-                if event.type == pg.QUIT:
-                    exit()
-                elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_ESCAPE:
+                events = pg.event.get()
+                for event in events:
+                    if event.type == pg.QUIT:
                         exit()
-                elif event.type == pg.MOUSEBUTTONDOWN:
-                    mouse_pos = event.pos
-                    for button in self.buttons:
-                        if button.rect.collidepoint(mouse_pos):
-                            if button.name == EXIT_BUTTON_NAME:
-                                exit()
-                            elif button.name == GENERATE_GRAPH_BUTTON_NAME:
-                                self.start_drawing_graph()
-                            elif button.name == EXPORT_TXT_BUTTON_NAME:
-                                print('Export txt!')
-                            elif button.name == EXPORT_PNG_BUTTON_NAME:
-                                print('Export png!')
-                    # print(mouse_pos)
+                    elif event.type == pg.KEYDOWN:
+                        if event.key == pg.K_ESCAPE:
+                            exit()
+                    elif event.type == pg.MOUSEBUTTONDOWN:
+                        mouse_pos = event.pos
+                        for button in self.buttons:
+                            if button.rect.collidepoint(mouse_pos):
+                                if button.name == EXIT_BUTTON_NAME:
+                                    exit()
+                                elif button.name == GENERATE_GRAPH_BUTTON_NAME:
+                                    self.start_drawing_graph()
+                                elif button.name == EXPORT_TXT_BUTTON_NAME:
+                                    print('Export txt!')
+                                elif button.name == EXPORT_PNG_BUTTON_NAME:
+                                    print('Export png!')
+                                elif button.name == INSTRUCTIONS_BUTTON_NAME:
+                                    graph_drawing = False
+                                    instructions = True
+                        # print(mouse_pos)
+                    for text_box in self.text_boxes:
+                        text_box.handle_event(event)
+                for text in self.texts:
+                    self.screen.blit(text[0], text[1])
                 for text_box in self.text_boxes:
-                    text_box.handle_event(event)
-            for text in self.texts:
-                self.screen.blit(text[0], text[1])
-            for text_box in self.text_boxes:
-                text_box.update()
-                text_box.draw()
-            self.draw_buttons()
-            # self.draw_graph([(10, 32), (50, 60), (78, 80)])
+                    text_box.update()
+                    text_box.draw()
+                self.draw_buttons()
+                # self.draw_graph([(10, 32), (50, 60), (78, 80)])
 
-            pg.display.update()
-            self.clock.tick(30)
+                pg.display.update()
+                self.clock.tick(30)
+            if instructions:
+                InstructionsScreen().run()
+            graph_drawing = True
+            instructions = False
