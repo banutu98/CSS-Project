@@ -3,6 +3,7 @@ from gui_components.utils import Button, InputBox
 from enum import Enum
 from gui_components import parser
 from gui_components.InstructionsScreen import InstructionsScreen
+from math_functions.math_functions import integral
 
 
 class TextBoxesIDs(Enum):
@@ -70,26 +71,47 @@ class DrawScreen:
         self.texts.append((text_surface, text_rect))
 
     def check_valid_input(self) -> bool:
-        should_be_numbers_id = [TextBoxesIDs.maximum_id_tb, TextBoxesIDs.minimum_id_tb,
+        should_be_numbers_id = [TextBoxesIDs.minimum_id_tb, TextBoxesIDs.maximum_id_tb,
                                 TextBoxesIDs.step_id_tb]
         for textbox_id in should_be_numbers_id:
             if not parser.check_expression_is_number(self.text_boxes[textbox_id.value].text):
                 self.draw_err_msg(textbox_id.name.replace('_id_tb', ' field') + ' is invalid!')
                 return False
         function_input = self.text_boxes[TextBoxesIDs.function_id_tb.value].text
-        minimum_input = self.text_boxes[TextBoxesIDs.minimum_id_tb.value].text
-        minimum_value = float(minimum_input)
+        minimum_value = float(self.text_boxes[TextBoxesIDs.minimum_id_tb.value].text)
+        maximum_value = float(self.text_boxes[TextBoxesIDs.maximum_id_tb.value].text)
+        step_value = float(self.text_boxes[TextBoxesIDs.step_id_tb.value].text)
 
-        is_ok, value = parser.check_expression_validity(function_input, minimum_value)
+        if minimum_value > maximum_value:
+            return False
+
+        if minimum_value + step_value < minimum_value:
+            return False
+
+
+        is_ok = parser.check_expression_validity(function_input)
         if not is_ok:
             self.draw_err_msg('The mathematical expression is invalid!')
             return False
-        print('ok: {}'.format(value))
+        # expr = parser.expr_to_lamda(function_input)
+        # value = expr(minimum_value)
+        # print('ok: {}'.format(value))
         return True
 
     def start_drawing_graph(self):
         if not self.check_valid_input():
             return
+        minimum_input = float(self.text_boxes[TextBoxesIDs.minimum_id_tb.value].text)
+        maximum_input = float(self.text_boxes[TextBoxesIDs.minimum_id_tb.value].text)
+
+        function_input = self.text_boxes[TextBoxesIDs.function_id_tb.value].text
+        integral_inside = parser.get_integral_inside_expression(function_input)
+        if integral_inside != '':
+            res_value = integral(integral_inside, minimum_input, maximum_input)
+        else:
+            lambda_exp = parser.expr_to_lamda(function_input)
+            res_value = lambda_exp(minimum_input)
+        print(res_value)
         # we should draw from here
         # self.draw_graph([(272, 13), (766, 537)])
 

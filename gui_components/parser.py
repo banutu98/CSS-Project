@@ -39,25 +39,56 @@ def _check_res(expression, x):
         return False, 0
 
 
-def check_expression_validity(expression: str, x: float) -> (bool, int):
+def get_integral_inside_expression(expression: str) -> str:
+    if expression.startswith('integral'):
+        expression = expression.lstrip('integral')
+        if len(expression) < 2:
+            return ''
+        if expression[0] != '(' or expression[len(expression) - 1] != ')':
+            return ''
+        expression = expression[1:]
+        expression = expression[:len(expression) - 1]
+        return expression
+    return ''
+
+
+def check_expression_validity(expression: str) -> bool:
+    integral_expr = get_integral_inside_expression(expression)
+    if integral_expr != '':
+        expression = integral_expr
+    if expression.startswith('integral'):
+        expression = expression.lstrip('integral')
+        if len(expression) < 2:
+            return False
+        if expression[0] != '(' or expression[len(expression) - 1] != ')':
+            return False
+        expression = expression[1:]
+        expression = expression[:len(expression) - 1]
+
     split_expr = checking_regex.split(expression)
     for token in split_expr:
         if token is not None and token is not '':  # not null
             if token not in allowed_variables and token not in function_names:  # not recognized
-                if not token.isnumeric():  # not a number
-                    print(token)
-                    return False, 0
+                if not check_expression_is_number(token):
+                    return False
+    return True
 
-    return _check_res(expression, x)
+
+def expr_to_lamda(expression: str):
+    return eval('lambda x: {}'.format(expression))
 
 
 def check_expression_is_number(expression: str):
-    return expression.isnumeric()
+    try:
+        float(expression)
+        return True
+    except ValueError:
+        return False
 
 
 if __name__ == '__main__':
     for expr in expressions:
-        ok = check_expression_validity(expr, 2)
+        ok = check_expression_validity(expr)
         print(expr + ' -> ' + str(ok))
         if ok:
-            print('value: {}'.format(check_expression_validity(expr, 0)))
+            print('value: {}'.format(check_expression_validity(expr)))
