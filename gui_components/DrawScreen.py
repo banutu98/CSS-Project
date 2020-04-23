@@ -4,6 +4,7 @@ from enum import Enum
 from gui_components import parser
 from gui_components.InstructionsScreen import InstructionsScreen
 from math_functions.math_functions import integral
+from export.export import Export
 
 
 class TextBoxesIDs(Enum):
@@ -153,9 +154,9 @@ class DrawScreen:
                                 elif button.name == GENERATE_GRAPH_BUTTON_NAME:
                                     self.start_drawing_graph()
                                 elif button.name == EXPORT_TXT_BUTTON_NAME:
-                                    print('Export txt!')
+                                    Export.export_txt([1,2,3], [4,5,6])
                                 elif button.name == EXPORT_PNG_BUTTON_NAME:
-                                    print('Export png!')
+                                    Export.export_image(self.screen)
                                 elif button.name == INSTRUCTIONS_BUTTON_NAME:
                                     graph_drawing = False
                                     instructions = True
