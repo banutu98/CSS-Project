@@ -1,4 +1,6 @@
 import pygame as pg
+from tkinter import *
+from tkinter import filedialog
 
 class Export:
     @staticmethod
@@ -8,13 +10,30 @@ class Export:
     @staticmethod
     def save_plot_as_text(path, x_values, y_values):
         coords_file = open(path, "w")
-        coords_file.write("X, Y")
+        coords_file.write("X,Y\n")
 
         for i in range(len(x_values)):
-            coords_file.write("{}, {}".format(x_values[i], y_values[i]))
+            coords_file.write("{},{}\n".format(x_values[i], y_values[i]))
 
         coords_file.close()
 
+    @staticmethod
+    def export_image(surface):
+        root = Tk()
+        root.withdraw()
+        root.filename = filedialog.asksaveasfilename(initialdir="/", title="Select file", defaultextension="*.*",
+                                                     filetypes=(("JPEG", ".jpg"), ("PNG", "*.png")))
+
+        Export.save_plot_as_image(root.filename, surface)
+
+    @staticmethod
+    def export_txt(x_values, y_values):
+        root = Tk()
+        root.withdraw()
+        root.filename = filedialog.asksaveasfilename(initialdir="/", title="Select file", defaultextension="*.*",
+                                                     filetypes=(("CSV", ".csv"), ))
+
+        Export.save_plot_as_text(root.filename, x_values, y_values)
 
 if __name__ == "__main__":
     pass
