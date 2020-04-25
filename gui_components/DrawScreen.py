@@ -5,7 +5,7 @@ from gui_components import parser
 from gui_components.InstructionsScreen import InstructionsScreen
 from math_functions.math_functions import integral
 from export.export import Export
-
+from gui_components.ErrorPopup import ErrorPopup
 
 class TextBoxesIDs(Enum):
     function_id_tb = 0
@@ -25,6 +25,8 @@ class DrawScreen:
         self.buttons = []
         self.text_boxes = []
         self.texts = []
+
+        self.error = False
 
     def add_button(self, font_name, font_size, button_name, text_color, center_location):
         font = pg.font.Font(font_name, font_size)
@@ -76,7 +78,7 @@ class DrawScreen:
                                 TextBoxesIDs.step_id_tb]
         for textbox_id in should_be_numbers_id:
             if not parser.check_expression_is_number(self.text_boxes[textbox_id.value].text):
-                self.draw_err_msg(textbox_id.name.replace('_id_tb', ' field') + ' is invalid!')
+                self.set_err_msg(textbox_id.name.replace('_id_tb', ' field') + ' is invalid!')
                 return False
         function_input = self.text_boxes[TextBoxesIDs.function_id_tb.value].text
         minimum_value = float(self.text_boxes[TextBoxesIDs.minimum_id_tb.value].text)
@@ -92,10 +94,11 @@ class DrawScreen:
 
         is_ok = parser.check_expression_validity(function_input)
         if not is_ok:
-            self.draw_err_msg('The mathematical expression is invalid!')
+            self.set_err_msg('The mathematical expression is invalid!')
             return False
         # expr = parser.expr_to_lamda(function_input)
         # value = expr(minimum_value)
+        # print('ok: {}'.format(value))
         # print('ok: {}'.format(value))
         return True
 
@@ -118,8 +121,30 @@ class DrawScreen:
 
         pass
 
-    def draw_err_msg(self, err_msg):
-        print(err_msg)
+    def set_err_msg(self, err_msg):
+        self.error = True
+        self.err_msg = err_msg
+
+    def draw_err_msg(self):
+        error_surface = pg.Surface(ERROR_SURFACE_SIZE)
+        error_surface.fill(pg.color.THECOLORS['cyan'])
+        error_surface_position = (SCREEN_SIZE[0] // 2 - ERROR_SURFACE_SIZE[0] // 2, SCREEN_SIZE[1] // 2 - ERROR_SURFACE_SIZE[1] // 2)
+        self.screen.blit(error_surface, error_surface_position)
+
+        text_surface = pg.font.Font(FONT_NAME, 23).render(self.err_msg, True, pg.color.THECOLORS['black'])
+        text_rect = text_surface.get_rect()
+        text_rect.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + ERROR_SURFACE_SIZE[1] // 6)
+        self.screen.blit(text_surface, text_rect)
+
+        font = pg.font.Font(FONT_NAME, 20)
+        text_surface = font.render("OK", True, pg.color.THECOLORS['black'])
+        text_location = text_surface.get_rect()
+        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
+
+        self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
+        self.ok_button.draw_border(self.screen, pg.color.THECOLORS['black'])
+        self.screen.blit(self.ok_button.surface, self.ok_button.rect)
+
 
     def draw_buttons(self):
         for button in self.buttons:
@@ -147,19 +172,27 @@ class DrawScreen:
                             exit()
                     elif event.type == pg.MOUSEBUTTONDOWN:
                         mouse_pos = event.pos
-                        for button in self.buttons:
-                            if button.rect.collidepoint(mouse_pos):
-                                if button.name == EXIT_BUTTON_NAME:
-                                    exit()
-                                elif button.name == GENERATE_GRAPH_BUTTON_NAME:
-                                    self.start_drawing_graph()
-                                elif button.name == EXPORT_TXT_BUTTON_NAME:
-                                    Export.export_txt([1,2,3], [4,5,6])
-                                elif button.name == EXPORT_PNG_BUTTON_NAME:
-                                    Export.export_image(self.screen)
-                                elif button.name == INSTRUCTIONS_BUTTON_NAME:
-                                    graph_drawing = False
-                                    instructions = True
+
+                        if not self.error:
+                            for button in self.buttons:
+                                if button.rect.collidepoint(mouse_pos):
+                                    if button.name == EXIT_BUTTON_NAME:
+                                        exit()
+                                    elif button.name == GENERATE_GRAPH_BUTTON_NAME:
+                                        self.start_drawing_graph()
+                                        if self.error:
+                                            graph_drawing = False
+                                            instructions = False
+                                    elif button.name == EXPORT_TXT_BUTTON_NAME:
+                                        Export.export_txt([1,2,3], [4,5,6])
+                                    elif button.name == EXPORT_PNG_BUTTON_NAME:
+                                        Export.export_image(self.screen)
+                                    elif button.name == INSTRUCTIONS_BUTTON_NAME:
+                                        graph_drawing = False
+                                        instructions = True
+                        else:
+                            if self.ok_button.rect.collidepoint(mouse_pos):
+                                self.error = False
                         # print(mouse_pos)
                     for text_box in self.text_boxes:
                         text_box.handle_event(event)
@@ -169,11 +202,16 @@ class DrawScreen:
                     text_box.update()
                     text_box.draw()
                 self.draw_buttons()
+
+                if self.error:
+                    self.draw_err_msg()
+
                 # self.draw_graph([(10, 32), (50, 60), (78, 80)])
 
                 pg.display.update()
                 self.clock.tick(30)
             if instructions:
                 InstructionsScreen().run()
+
             graph_drawing = True
             instructions = False
