@@ -120,6 +120,22 @@ class PlotScreen:
         self.draw_buttons()
         pg.display.update()
 
+    def zoom(self, button):
+        print(self.min_v, self.max_v)
+        # compute step vased on current interval length
+        diff = (self.max_v - self.min_v) / 2
+        step = max(int(ZOOM_PROPORTION * diff), 4)
+        direction = 1 if button == 4 else -1
+        if direction == 1:
+            if self.max_v - self.min_v > 2*step:
+                self.max_v -= step
+                self.min_v += step
+        else:
+            print(direction * step)
+            self.max_v += step
+            self.min_v -= step
+
+
     def run(self):
         self.init_buttons()
         self.init_texts()
@@ -134,23 +150,8 @@ class PlotScreen:
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
                     # convert to coords relative to drawing surface
-                    if event.button == 4:
-                        # compute step based on current interval length
-                        diff = (self.max_v - self.min_v) / 2
-                        step = max(int(ZOOM_PROPORTION * diff), 4)
-                        # mouse button up
-                        if self.max_v - self.min_v > step:
-                            self.max_v -= step
-                            self.min_v += step
-                        self.draw()
-                    elif event.button == 5:
-                        # compute step based on current interval length
-                        diff = (self.max_v - self.min_v) / 2
-                        step = max(int(ZOOM_PROPORTION * diff), 4)
-                        # mouse button down
-                        if self.max_v - self.min_v > step:
-                            self.max_v += step
-                            self.min_v -= step
+                    if event.button in [4, 5]:
+                        self.zoom(event.button)
                         self.draw()
                     else:
                         for button in self.buttons:
