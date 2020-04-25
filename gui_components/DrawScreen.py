@@ -3,7 +3,7 @@ from gui_components.utils import Button, InputBox
 from enum import Enum
 from gui_components import parser
 from gui_components.InstructionsScreen import InstructionsScreen
-from math_functions.math_functions import integral
+from gui_components.PlotScreen import PlotScreen
 from export.export import Export
 from gui_components.ErrorPopup import ErrorPopup
 
@@ -91,7 +91,6 @@ class DrawScreen:
         if minimum_value + step_value < minimum_value:
             return False
 
-
         is_ok = parser.check_expression_validity(function_input)
         if not is_ok:
             self.set_err_msg('The mathematical expression is invalid!')
@@ -102,24 +101,17 @@ class DrawScreen:
         # print('ok: {}'.format(value))
         return True
 
-    def start_drawing_graph(self):
-        if not self.check_valid_input():
-            return
+    def get_input(self):
         minimum_input = float(self.text_boxes[TextBoxesIDs.minimum_id_tb.value].text)
-        maximum_input = float(self.text_boxes[TextBoxesIDs.minimum_id_tb.value].text)
-
+        maximum_input = float(self.text_boxes[TextBoxesIDs.maximum_id_tb.value].text)
+        step_input = float(self.text_boxes[TextBoxesIDs.step_id_tb.value].text)
         function_input = self.text_boxes[TextBoxesIDs.function_id_tb.value].text
-        integral_inside = parser.get_integral_inside_expression(function_input)
-        if integral_inside != '':
-            res_value = integral(integral_inside, minimum_input, maximum_input)
-        else:
-            lambda_exp = parser.expr_to_lamda(function_input)
-            res_value = lambda_exp(minimum_input)
-        print(res_value)
-        # we should draw from here
-        # self.draw_graph([(272, 13), (766, 537)])
-
-        pass
+        return {
+            'min': minimum_input,
+            'max': maximum_input,
+            'step': step_input,
+            'func': function_input
+        }
 
     def set_err_msg(self, err_msg):
         self.error = True
@@ -143,6 +135,11 @@ class DrawScreen:
 
         self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
         self.ok_button.draw_border(self.screen, pg.color.THECOLORS['black'])
+        text_location = text_surface.get_rect()
+        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
+
+        self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
+        self.ok_button.draw_border(self.screen, pg.color.THECOLORS['black'])
         self.screen.blit(self.ok_button.surface, self.ok_button.rect)
 
 
@@ -159,6 +156,7 @@ class DrawScreen:
 
         graph_drawing = True
         instructions = False
+        plot_mode = False
         while True:
             while graph_drawing:
                 self.screen.fill(pg.color.THECOLORS['aquamarine3'])
@@ -172,14 +170,15 @@ class DrawScreen:
                             exit()
                     elif event.type == pg.MOUSEBUTTONDOWN:
                         mouse_pos = event.pos
-
                         if not self.error:
                             for button in self.buttons:
                                 if button.rect.collidepoint(mouse_pos):
                                     if button.name == EXIT_BUTTON_NAME:
                                         exit()
                                     elif button.name == GENERATE_GRAPH_BUTTON_NAME:
-                                        self.start_drawing_graph()
+                                        graph_drawing = False
+                                        plot_mode = True
+                                        ### There is no function that sets self.error for the plot button
                                         if self.error:
                                             graph_drawing = False
                                             instructions = False
@@ -212,6 +211,10 @@ class DrawScreen:
                 self.clock.tick(30)
             if instructions:
                 InstructionsScreen().run()
-
+            if plot_mode:
+                if self.check_valid_input():
+                    inputs = self.get_input()
+                    print(inputs)
+                    PlotScreen(inputs).run()
             graph_drawing = True
             instructions = False
