@@ -5,7 +5,6 @@ from gui_components import parser
 from gui_components.InstructionsScreen import InstructionsScreen
 from gui_components.PlotScreen import PlotScreen
 from export.export import Export
-from gui_components.ErrorPopup import ErrorPopup
 
 class TextBoxesIDs(Enum):
     function_id_tb = 0
