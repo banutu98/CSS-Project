@@ -16,7 +16,7 @@ class PlotScreen:
         self.texts = []
         self.min_v = inputs['min']
         self.max_v = inputs['max']
-        self.n_steps = inputs['steps']
+        self.step = inputs['step']
         self.func = inputs['func']
         w, h = self.screen.get_width(), self.screen.get_height()
         self.plot_x = 210
@@ -60,10 +60,10 @@ class PlotScreen:
 
         minimum_input = self.min_v
         maximum_input = self.max_v
-        steps_input = self.n_steps
+        steps_input = self.step
         function_input = self.func
         integral_inside = parser.get_integral_inside_expression(function_input)
-        step = (maximum_input - minimum_input) / steps_input
+        step = self.step
 
         if integral_inside != '':
             x = minimum_input
@@ -121,20 +121,16 @@ class PlotScreen:
         pg.display.update()
 
     def zoom(self, button):
-        print(self.min_v, self.max_v)
-        # compute step vased on current interval length
+        # compute step based on current interval length
         diff = (self.max_v - self.min_v) / 2
-        step = max(int(ZOOM_PROPORTION * diff), 4)
+        interval_step = ZOOM_PROPORTION * diff
         direction = 1 if button == 4 else -1
-        if direction == 1:
-            if self.max_v - self.min_v > 2*step:
-                self.max_v -= step
-                self.min_v += step
-        else:
-            print(direction * step)
-            self.max_v += step
-            self.min_v -= step
-
+        if ((direction == 1 and 2 * diff < MIN_INTERVAL_LENGTH) or
+            (direction == -1 and 2 * diff > MAX_INTERVAL_LENGTH)):
+            direction = 0
+        self.max_v -= interval_step * direction
+        self.min_v += interval_step * direction
+        self.step -= ZOOM_PROPORTION * self.step * direction
 
     def run(self):
         self.init_buttons()
@@ -149,8 +145,8 @@ class PlotScreen:
                         exit()
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
-                    # convert to coords relative to drawing surface
                     if event.button in [4, 5]:
+                        # 4 and 5 are mousewheel up and down
                         self.zoom(event.button)
                         self.draw()
                     else:

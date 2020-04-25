@@ -106,7 +106,7 @@ class DrawScreen:
         return {
             'min': minimum_input,
             'max': maximum_input,
-            'steps': step_input,
+            'step': step_input,
             'func': function_input
         }
 

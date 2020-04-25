@@ -15,4 +15,6 @@ FONT_NAME = os.path.join(os.getcwd(), 'resources', 'handwriting.ttf')
 TEXTBOX_FONT_NAME = os.path.join(os.getcwd(), 'resources', 'NixieOne.ttf')
 TEXTBOX_INACTIVE_COLOR = pg.color.THECOLORS['black']
 TEXTBOX_ACTIVE_COLOR = pg.color.THECOLORS['darkcyan']
-ZOOM_PROPORTION = 0.05
+ZOOM_PROPORTION = 0.1
+MIN_INTERVAL_LENGTH = 1.0
+MAX_INTERVAL_LENGTH = 10000.0
