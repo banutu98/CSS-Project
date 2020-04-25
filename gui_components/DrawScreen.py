@@ -3,7 +3,7 @@ from gui_components.utils import Button, InputBox
 from enum import Enum
 from gui_components import parser
 from gui_components.InstructionsScreen import InstructionsScreen
-from math_functions.math_functions import integral
+from gui_components.PlotScreen import PlotScreen
 from export.export import Export
 
 
@@ -89,7 +89,6 @@ class DrawScreen:
         if minimum_value + step_value < minimum_value:
             return False
 
-
         is_ok = parser.check_expression_validity(function_input)
         if not is_ok:
             self.draw_err_msg('The mathematical expression is invalid!')
@@ -99,24 +98,17 @@ class DrawScreen:
         # print('ok: {}'.format(value))
         return True
 
-    def start_drawing_graph(self):
-        if not self.check_valid_input():
-            return
+    def get_input(self):
         minimum_input = float(self.text_boxes[TextBoxesIDs.minimum_id_tb.value].text)
-        maximum_input = float(self.text_boxes[TextBoxesIDs.minimum_id_tb.value].text)
-
+        maximum_input = float(self.text_boxes[TextBoxesIDs.maximum_id_tb.value].text)
+        step_input = float(self.text_boxes[TextBoxesIDs.step_id_tb.value].text)
         function_input = self.text_boxes[TextBoxesIDs.function_id_tb.value].text
-        integral_inside = parser.get_integral_inside_expression(function_input)
-        if integral_inside != '':
-            res_value = integral(integral_inside, minimum_input, maximum_input)
-        else:
-            lambda_exp = parser.expr_to_lamda(function_input)
-            res_value = lambda_exp(minimum_input)
-        print(res_value)
-        # we should draw from here
-        # self.draw_graph([(272, 13), (766, 537)])
-
-        pass
+        return {
+            'min': minimum_input,
+            'max': maximum_input,
+            'steps': step_input,
+            'func': function_input
+        }
 
     def draw_err_msg(self, err_msg):
         print(err_msg)
@@ -134,6 +126,7 @@ class DrawScreen:
 
         graph_drawing = True
         instructions = False
+        plot_mode = False
         while True:
             while graph_drawing:
                 self.screen.fill(pg.color.THECOLORS['aquamarine3'])
@@ -152,7 +145,8 @@ class DrawScreen:
                                 if button.name == EXIT_BUTTON_NAME:
                                     exit()
                                 elif button.name == GENERATE_GRAPH_BUTTON_NAME:
-                                    self.start_drawing_graph()
+                                    graph_drawing = False
+                                    plot_mode = True
                                 elif button.name == EXPORT_TXT_BUTTON_NAME:
                                     Export.export_txt([1,2,3], [4,5,6])
                                 elif button.name == EXPORT_PNG_BUTTON_NAME:
@@ -175,5 +169,10 @@ class DrawScreen:
                 self.clock.tick(30)
             if instructions:
                 InstructionsScreen().run()
+            if plot_mode:
+                if self.check_valid_input():
+                    inputs = self.get_input()
+                    print(inputs)
+                    PlotScreen(inputs).run()
             graph_drawing = True
             instructions = False
