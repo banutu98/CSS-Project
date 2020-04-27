@@ -139,6 +139,7 @@ class PlotScreen:
     def run(self):
         self.init_buttons()
         self.init_texts()
+        self.draw()
         while True:
             events = pg.event.get()
             for event in events:
@@ -171,7 +172,5 @@ class PlotScreen:
                 elif event.type == pg.VIDEORESIZE:
                     self.screen = pg.display.set_mode(event.dict['size'],
                                                       pg.RESIZABLE|pg.HWSURFACE|pg.DOUBLEBUF)
-                    self.draw()
-                else:
                     self.draw()
             self.clock.tick(30)
