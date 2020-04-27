@@ -24,7 +24,11 @@ class Export:
         root.filename = filedialog.asksaveasfilename(initialdir="/", title="Select file", defaultextension="*.*",
                                                      filetypes=(("JPEG", ".jpg"), ("PNG", "*.png")))
 
-        Export.save_plot_as_image(root.filename, surface)
+        if root.filename:
+            Export.save_plot_as_image(root.filename, surface)
+            return True
+        print(root.filename)
+        return False
 
     @staticmethod
     def export_txt(x_values, y_values):
@@ -33,7 +37,11 @@ class Export:
         root.filename = filedialog.asksaveasfilename(initialdir="/", title="Select file", defaultextension="*.*",
                                                      filetypes=(("CSV", ".csv"), ))
 
-        Export.save_plot_as_text(root.filename, x_values, y_values)
+        if root.filename:
+            Export.save_plot_as_text(root.filename, x_values, y_values)
+            return True
+
+        return False
 
 if __name__ == "__main__":
     pass
