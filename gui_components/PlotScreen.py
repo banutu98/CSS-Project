@@ -86,10 +86,34 @@ class PlotScreen:
                 x += step
         return list(zip(xs, ys))
 
+    def draw_axes(self, points):
+        self.plot_surface.fill((255, 255, 255))
+        min_x, min_y = map(min, zip(*points))
+        max_x, max_y = map(max, zip(*points))
+        surface_w, surface_h = self.plot_surface.get_size()
+        diff_x, diff_y = max_x - min_x, max_y - min_y
+        if min_y < 0 < max_y:
+            # draw x axis
+            y_start = (abs(min_y) / diff_y) * surface_h
+            # invert y axis
+            y_start = surface_h - y_start
+            pg.draw.line(self.plot_surface, pg.color.THECOLORS['black'],
+                         (0, y_start),
+                         (surface_w, y_start),
+                         2)
+        if min_x < 0 < max_x:
+            # draw y axis
+            x_start = (abs(min_x) / diff_x) * surface_w
+            pg.draw.line(self.plot_surface, pg.color.THECOLORS['black'],
+                         (x_start, 0),
+                         (x_start, surface_h),
+                         2)
+        self.screen.blit(self.plot_surface, (self.plot_x, self.plot_y))
+
+
     def plot_function(self, points):
         surface_x, surface_y = self.plot_surface.get_offset()
         surface_w, surface_h = self.plot_surface.get_size()
-        self.plot_surface.fill((255, 255, 255))
         min_x, min_y = map(min, zip(*points))
         max_x, max_y = map(max, zip(*points))
         diff_x, diff_y = max_x - min_x, max_y - min_y
@@ -118,7 +142,9 @@ class PlotScreen:
 
     def draw(self):
         self.screen.fill(pg.color.THECOLORS['aquamarine3'])
-        self.plot_function(self.get_points())
+        points = self.get_points()
+        self.draw_axes(points)
+        self.plot_function(points)
         for text in self.texts:
             self.screen.blit(text[0], text[1])
         self.draw_buttons()
