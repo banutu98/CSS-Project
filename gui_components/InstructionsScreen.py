@@ -54,29 +54,27 @@ class InstructionsScreen:
         text_rect = text_surface.get_rect()
         text_rect.topleft = (50, 300)
         self.texts.append((text_surface, text_rect))
+        self.texts.append((text_surface, text_rect))    # double append for bold effect
 
-        text_surface = pg.font.Font(FONT_NAME, 18).render('Examples:',
-                                                          True, pg.color.THECOLORS['black'])
-        text_rect = text_surface.get_rect()
-        text_rect.topleft = (50, 300)
-        self.texts.append((text_surface, text_rect))
-
-        text_surface = pg.font.Font(FONT_NAME, 18).render('* function: sin(x) , Min: 1, Max 10, Step: 1',
-                                                          True, pg.color.THECOLORS['black'])
+        text_surface = pg.font.Font(TEXTBOX_FONT_NAME, 18).render('* Function: sin(x) , Min: 1, Max 10, Step: 1',
+                                                                  True, pg.color.THECOLORS['black'])
         text_rect = text_surface.get_rect()
         text_rect.topleft = (50, 350)
         self.texts.append((text_surface, text_rect))
+        self.texts.append((text_surface, text_rect))
 
-        text_surface = pg.font.Font(FONT_NAME, 18).render('* Function: integrala(sin(x)) , Min: 1, Max: 10, Step: 1)',
-                                                          True, pg.color.THECOLORS['black'])
+        text_surface = pg.font.Font(TEXTBOX_FONT_NAME, 18).render('* Function: integrala(sin(x)) , Min: 1, Max: 10, Step: 1',
+                                                                  True, pg.color.THECOLORS['black'])
         text_rect = text_surface.get_rect()
         text_rect.topleft = (50, 400)
         self.texts.append((text_surface, text_rect))
+        self.texts.append((text_surface, text_rect))
 
-        text_surface = pg.font.Font(FONT_NAME, 18).render('* Function: x*x+2, Min: -10, Max: 100, Step: 2',
-                                                          True, pg.color.THECOLORS['black'])
+        text_surface = pg.font.Font(TEXTBOX_FONT_NAME, 18).render('* Function: x*x+2, Min: -10, Max: 100, Step: 2',
+                                                                  True, pg.color.THECOLORS['black'])
         text_rect = text_surface.get_rect()
         text_rect.topleft = (50, 450)
+        self.texts.append((text_surface, text_rect))
         self.texts.append((text_surface, text_rect))
 
     def draw_buttons(self):
