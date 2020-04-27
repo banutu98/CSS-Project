@@ -4,7 +4,6 @@ from enum import Enum
 from gui_components import parser
 from gui_components.InstructionsScreen import InstructionsScreen
 from gui_components.PlotScreen import PlotScreen
-from export.export import Export
 
 class TextBoxesIDs(Enum):
     function_id_tb = 0
@@ -41,8 +40,6 @@ class DrawScreen:
     def init_buttons(self):
         self.add_button(FONT_NAME, 20, EXIT_BUTTON_NAME, pg.color.THECOLORS['black'], (730, 570))
         self.add_button(FONT_NAME, 20, INSTRUCTIONS_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 570))
-        self.add_button(FONT_NAME, 20, EXPORT_TXT_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 370))
-        self.add_button(FONT_NAME, 20, EXPORT_PNG_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 320))
         self.add_button(FONT_NAME, 20, GENERATE_GRAPH_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 270))
 
     def init_text_boxes(self):
@@ -118,27 +115,27 @@ class DrawScreen:
 
     def draw_err_msg(self):
         error_surface = pg.Surface(ERROR_SURFACE_SIZE)
-        error_surface.fill(pg.color.THECOLORS['cyan'])
+        error_surface.fill(pg.color.THECOLORS['darkslategray'])
         error_surface_position = (SCREEN_SIZE[0] // 2 - ERROR_SURFACE_SIZE[0] // 2, SCREEN_SIZE[1] // 2 - ERROR_SURFACE_SIZE[1] // 2)
         self.screen.blit(error_surface, error_surface_position)
 
-        text_surface = pg.font.Font(FONT_NAME, 23).render(self.err_msg, True, pg.color.THECOLORS['black'])
+        text_surface = pg.font.Font(FONT_NAME, 23).render(self.err_msg, True, pg.color.THECOLORS['white'])
         text_rect = text_surface.get_rect()
         text_rect.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + ERROR_SURFACE_SIZE[1] // 6)
         self.screen.blit(text_surface, text_rect)
 
         font = pg.font.Font(FONT_NAME, 20)
-        text_surface = font.render("OK", True, pg.color.THECOLORS['black'])
+        text_surface = font.render("OK", True, pg.color.THECOLORS['white'])
         text_location = text_surface.get_rect()
         text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
 
         self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
-        self.ok_button.draw_border(self.screen, pg.color.THECOLORS['black'])
+        self.ok_button.draw_border(self.screen, pg.color.THECOLORS['white'])
         text_location = text_surface.get_rect()
         text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
 
         self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
-        self.ok_button.draw_border(self.screen, pg.color.THECOLORS['black'])
+        self.ok_button.draw_border(self.screen, pg.color.THECOLORS['white'])
         self.screen.blit(self.ok_button.surface, self.ok_button.rect)
 
 
@@ -181,19 +178,17 @@ class DrawScreen:
                                         if self.error:
                                             graph_drawing = False
                                             instructions = False
-                                    elif button.name == EXPORT_TXT_BUTTON_NAME:
-                                        Export.export_txt([1,2,3], [4,5,6])
-                                    elif button.name == EXPORT_PNG_BUTTON_NAME:
-                                        Export.export_image(self.screen)
                                     elif button.name == INSTRUCTIONS_BUTTON_NAME:
                                         graph_drawing = False
                                         instructions = True
                         else:
                             if self.ok_button.rect.collidepoint(mouse_pos):
                                 self.error = False
+
                         # print(mouse_pos)
-                    for text_box in self.text_boxes:
-                        text_box.handle_event(event)
+                    if not self.error:
+                        for text_box in self.text_boxes:
+                            text_box.handle_event(event)
                 for text in self.texts:
                     self.screen.blit(text[0], text[1])
                 for text_box in self.text_boxes:
@@ -208,12 +203,16 @@ class DrawScreen:
 
                 pg.display.update()
                 self.clock.tick(30)
+
             if instructions:
                 InstructionsScreen().run()
+
             if plot_mode:
                 if self.check_valid_input():
                     inputs = self.get_input()
                     print(inputs)
                     PlotScreen(inputs).run()
+
             graph_drawing = True
             instructions = False
+            plot_mode = False

@@ -2,7 +2,7 @@ from gui_components.defines import *
 from gui_components.utils import Button
 from gui_components import parser
 from math_functions.math_functions import integral
-
+from export.export import Export
 
 class PlotScreen:
 
@@ -35,6 +35,8 @@ class PlotScreen:
     def init_buttons(self):
         self.add_button(FONT_NAME, 20, EXIT_BUTTON_NAME, pg.color.THECOLORS['black'], (730, 570))
         self.add_button(FONT_NAME, 20, BACK_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 570))
+        self.add_button(FONT_NAME, 20, EXPORT_TXT_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 370))
+        self.add_button(FONT_NAME, 20, EXPORT_PNG_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 320))
 
     def init_texts(self):
         text_surface = pg.font.Font(FONT_NAME, 30).render('Plotting function f(x)', True, pg.color.THECOLORS['black'])
@@ -156,6 +158,14 @@ class PlotScreen:
                                     exit()
                                 elif button.name == BACK_BUTTON_NAME:
                                     return
+                                elif button.name == EXPORT_PNG_BUTTON_NAME:
+                                    Export.export_image(self.plot_surface)
+                                elif button.name == EXPORT_TXT_BUTTON_NAME:
+                                    points = self.get_points()
+                                    x_list = [x[0] for x in points]
+                                    y_list = [y[0] for y in points]
+                                    Export.export_txt(x_list, y_list)
+
                 elif event.type == pg.VIDEORESIZE:
                     self.screen = pg.display.set_mode(event.dict['size'],
                                                       pg.RESIZABLE|pg.HWSURFACE|pg.DOUBLEBUF)
