@@ -10,7 +10,7 @@ class PlotScreen:
         pg.init()
         pg.display.set_caption(WINDOW_TITLE)
 
-        self.screen = pg.display.set_mode(SCREEN_SIZE, pg.RESIZABLE|pg.HWSURFACE|pg.DOUBLEBUF)
+        self.screen = pg.display.set_mode(SCREEN_SIZE)
         self.clock = pg.time.Clock()
         self.buttons = []
         self.texts = []
@@ -234,11 +234,6 @@ class PlotScreen:
                         if self.ok_button.rect.collidepoint(mouse_pos):
                             self.error = False
                             self.draw()
-
-                elif event.type == pg.VIDEORESIZE:
-                    self.screen = pg.display.set_mode(event.dict['size'],
-                                                      pg.RESIZABLE|pg.HWSURFACE|pg.DOUBLEBUF)
-                    self.draw()
 
             if self.error:
                 self.draw_err_msg()
