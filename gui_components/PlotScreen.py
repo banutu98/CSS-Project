@@ -69,8 +69,10 @@ class PlotScreen:
 
         if integral_inside != '':
             x = minimum_input
+            integrated_func = parser.expr_to_lamda(integral_inside)
             while x + step <= maximum_input:
-                y = integral(integral_inside, x, x + step)
+                y = integral(integrated_func, minimum_input, x + step,
+                             nr_rectangles=NR_RECTANGLES)
                 xs.append(x)
                 ys.append(y)
                 x += step

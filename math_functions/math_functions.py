@@ -2,13 +2,13 @@ from math import log
 from math import sin, cos
 
 
-def integral(fnc_expression, lower_bound, upper_bound, nr_rectangles=10000):
+def integral(func, lower_bound, upper_bound, nr_rectangles=10000):
     integral_result = 0
     rectangle_width = (upper_bound - lower_bound) / nr_rectangles
 
     for i in range(nr_rectangles):
         x = lower_bound + i * rectangle_width
-        integral_result += rectangle_width * eval(fnc_expression)
+        integral_result += rectangle_width * func(x)
 
     return integral_result
 
