@@ -53,6 +53,7 @@ def get_integral_inside_expression(expression: str) -> str:
 
 
 def check_expression_validity(expression: str) -> bool:
+    expression = expression.replace(' ', '')  # ignore spaces
     integral_expr = get_integral_inside_expression(expression)
     if integral_expr != '':
         expression = integral_expr

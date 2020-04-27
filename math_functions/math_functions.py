@@ -1,7 +1,8 @@
 from math import log
+from math import sin, cos
 
 
-def integral(fnc_expression, lower_bound, upper_bound, nr_rectangles = 10000):
+def integral(fnc_expression, lower_bound, upper_bound, nr_rectangles=10000):
     integral_result = 0
     rectangle_width = (upper_bound - lower_bound) / nr_rectangles
 
@@ -10,6 +11,7 @@ def integral(fnc_expression, lower_bound, upper_bound, nr_rectangles = 10000):
         integral_result += rectangle_width * eval(fnc_expression)
 
     return integral_result
+
 
 if __name__ == "__main__":
     print("Math functions library for Plot Master")
