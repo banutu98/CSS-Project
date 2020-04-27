@@ -2,7 +2,7 @@ from math import log
 from math import sin, cos
 
 
-def integral(fnc_expression, lower_bound, upper_bound, nr_rectangles=10000):
+def integral(fnc_expression, lower_bound, upper_bound, nr_rectangles=1000):
     integral_result = 0
     rectangle_width = (upper_bound - lower_bound) / nr_rectangles
 
