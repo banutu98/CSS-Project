@@ -1,5 +1,5 @@
 import re
-from math import cos, sin
+from math import cos, sin, tan, asin, acos, atan, sqrt
 
 
 # from .api import *
@@ -7,11 +7,11 @@ from math import cos, sin
 # from math import cos, sin
 # from .parser_math_functions import cartof
 
-def cartof(x):
-    return x * 5
+def ctan(x):
+    return 1 / tan(x)
 
 
-allowed_functions = [cos, sin, cartof]
+allowed_functions = [cos, sin, tan, ctan, asin, acos, atan, sqrt]
 allowed_operators = ['+', '-', '/', '*', '**', '(', ')']
 allowed_variables = ['x']
 

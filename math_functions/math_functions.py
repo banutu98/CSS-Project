@@ -1,5 +1,9 @@
 from math import log
-from math import sin, cos
+from math import sin, cos, tan, asin, acos, atan, sqrt
+
+
+def ctan(x):
+    return 1 / tan(x)
 
 
 def integral(func, lower_bound, upper_bound, nr_rectangles=10000):
