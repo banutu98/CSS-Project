@@ -81,10 +81,12 @@ class DrawScreen:
         maximum_value = float(self.text_boxes[TextBoxesIDs.maximum_id_tb.value].text)
         step_value = float(self.text_boxes[TextBoxesIDs.step_id_tb.value].text)
 
-        if minimum_value > maximum_value:
+        if minimum_value >= maximum_value:
+            self.set_err_msg('Minimum should be lower than maximum!')
             return False
 
         if minimum_value + step_value < minimum_value:
+            self.set_err_msg('Minimum should be bigger than maximum + step!')
             return False
 
         is_ok = parser.check_expression_validity(function_input)
