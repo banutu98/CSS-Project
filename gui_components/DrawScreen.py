@@ -212,7 +212,6 @@ class DrawScreen:
             if plot_mode:
                 if self.check_valid_input():
                     inputs = self.get_input()
-                    print(inputs)
                     PlotScreen(inputs).run()
 
             graph_drawing = True

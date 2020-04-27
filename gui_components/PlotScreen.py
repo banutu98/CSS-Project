@@ -25,6 +25,8 @@ class PlotScreen:
         self.plot_h = h//2
         self.plot_surface = pg.Surface((self.plot_w, self.plot_h))
 
+        self.error = False
+
     def add_button(self, font_name, font_size, button_name, text_color, center_location):
         font = pg.font.Font(font_name, font_size)
         text_surface = font.render(button_name, True, text_color)
@@ -148,7 +150,6 @@ class PlotScreen:
         for text in self.texts:
             self.screen.blit(text[0], text[1])
         self.draw_buttons()
-        pg.display.update()
 
     def zoom(self, button):
         # compute step based on current interval length
@@ -161,6 +162,35 @@ class PlotScreen:
         self.max_v -= interval_step * direction
         self.min_v += interval_step * direction
         self.step -= ZOOM_PROPORTION * self.step * direction
+
+    def set_err_msg(self, err_msg):
+        self.error = True
+        self.err_msg = err_msg
+
+    def draw_err_msg(self):
+        error_surface = pg.Surface(ERROR_SURFACE_SIZE)
+        error_surface.fill(pg.color.THECOLORS['darkslategray'])
+        error_surface_position = (SCREEN_SIZE[0] // 2 - ERROR_SURFACE_SIZE[0] // 2, SCREEN_SIZE[1] // 2 - ERROR_SURFACE_SIZE[1] // 2)
+        self.screen.blit(error_surface, error_surface_position)
+
+        text_surface = pg.font.Font(FONT_NAME, 23).render(self.err_msg, True, pg.color.THECOLORS['white'])
+        text_rect = text_surface.get_rect()
+        text_rect.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + ERROR_SURFACE_SIZE[1] // 6)
+        self.screen.blit(text_surface, text_rect)
+
+        font = pg.font.Font(FONT_NAME, 20)
+        text_surface = font.render("OK", True, pg.color.THECOLORS['white'])
+        text_location = text_surface.get_rect()
+        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
+
+        self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
+        self.ok_button.draw_border(self.screen, pg.color.THECOLORS['white'])
+        text_location = text_surface.get_rect()
+        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
+
+        self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
+        self.ok_button.draw_border(self.screen, pg.color.THECOLORS['white'])
+        self.screen.blit(self.ok_button.surface, self.ok_button.rect)
 
     def run(self):
         self.init_buttons()
@@ -176,27 +206,41 @@ class PlotScreen:
                         exit()
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
-                    if event.button in [4, 5]:
-                        # 4 and 5 are mousewheel up and down
-                        self.zoom(event.button)
-                        self.draw()
+                    if not self.error:
+                        if event.button in [4, 5]:
+                            # 4 and 5 are mousewheel up and down
+                            self.zoom(event.button)
+                            self.draw()
+                        else:
+                            for button in self.buttons:
+                                if button.rect.collidepoint(mouse_pos):
+                                    if button.name == EXIT_BUTTON_NAME:
+                                        exit()
+                                    elif button.name == BACK_BUTTON_NAME:
+                                        return
+                                    elif button.name == EXPORT_PNG_BUTTON_NAME:
+                                        export_success = Export.export_image(self.plot_surface)
+                                        if not export_success:
+                                            self.set_err_msg("Please choose a valid file path!")
+                                    elif button.name == EXPORT_TXT_BUTTON_NAME:
+                                        points = self.get_points()
+                                        x_list = [x[0] for x in points]
+                                        y_list = [y[0] for y in points]
+
+                                        export_success = Export.export_txt(x_list, y_list)
+                                        if not export_success:
+                                            self.set_err_msg("Please choose a valid file path!")
                     else:
-                        for button in self.buttons:
-                            if button.rect.collidepoint(mouse_pos):
-                                if button.name == EXIT_BUTTON_NAME:
-                                    exit()
-                                elif button.name == BACK_BUTTON_NAME:
-                                    return
-                                elif button.name == EXPORT_PNG_BUTTON_NAME:
-                                    Export.export_image(self.plot_surface)
-                                elif button.name == EXPORT_TXT_BUTTON_NAME:
-                                    points = self.get_points()
-                                    x_list = [x[0] for x in points]
-                                    y_list = [y[0] for y in points]
-                                    Export.export_txt(x_list, y_list)
+                        if self.ok_button.rect.collidepoint(mouse_pos):
+                            self.error = False
+                            self.draw()
 
                 elif event.type == pg.VIDEORESIZE:
                     self.screen = pg.display.set_mode(event.dict['size'],
                                                       pg.RESIZABLE|pg.HWSURFACE|pg.DOUBLEBUF)
                     self.draw()
+
+            if self.error:
+                self.draw_err_msg()
+            pg.display.update()
             self.clock.tick(30)

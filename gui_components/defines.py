@@ -2,7 +2,7 @@ import os
 import pygame as pg
 
 SCREEN_SIZE = (800, 600)
-ERROR_SURFACE_SIZE = (400, 100)
+ERROR_SURFACE_SIZE = (550, 100)
 WINDOW_TITLE = 'PlotMaster v1.1'
 MENU_TITLE = 'PlotMaster'
 OK_BUTTON_NAME = 'OK'
