@@ -4,6 +4,7 @@ from gui_components import parser
 from math_functions.math_functions import integral
 from export.export import Export
 
+
 class PlotScreen:
 
     def __init__(self, inputs):
@@ -21,8 +22,8 @@ class PlotScreen:
         w, h = self.screen.get_width(), self.screen.get_height()
         self.plot_x = 210
         self.plot_y = 100
-        self.plot_w = w//2
-        self.plot_h = h//2
+        self.plot_w = w // 2
+        self.plot_h = h // 2
         self.plot_surface = pg.Surface((self.plot_w, self.plot_h))
 
         self.error = False
@@ -112,14 +113,13 @@ class PlotScreen:
                          2)
         self.screen.blit(self.plot_surface, (self.plot_x, self.plot_y))
 
-
     def plot_function(self, points):
         surface_x, surface_y = self.plot_surface.get_offset()
         surface_w, surface_h = self.plot_surface.get_size()
         min_x, min_y = map(min, zip(*points))
         max_x, max_y = map(max, zip(*points))
         diff_x, diff_y = max_x - min_x, max_y - min_y
-        for i in range(len(points)-1):
+        for i in range(len(points) - 1):
             # adjust points
             # first, scale to surface width and height
             x_start, y_start = points[i]
@@ -127,7 +127,7 @@ class PlotScreen:
             y_start -= min_y
             adj_x_start = (x_start / diff_x) * surface_w
             adj_y_start = (y_start / diff_y) * surface_h
-            x_end, y_end = points[i+1]
+            x_end, y_end = points[i + 1]
             x_end -= min_x
             y_end -= min_y
             adj_x_end = (x_end / diff_x) * surface_w
@@ -157,7 +157,7 @@ class PlotScreen:
         interval_step = ZOOM_PROPORTION * diff
         direction = 1 if button == 4 else -1
         if ((direction == 1 and 2 * diff < MIN_INTERVAL_LENGTH) or
-            (direction == -1 and 2 * diff > MAX_INTERVAL_LENGTH)):
+                (direction == -1 and 2 * diff > MAX_INTERVAL_LENGTH)):
             direction = 0
         self.max_v -= interval_step * direction
         self.min_v += interval_step * direction
@@ -170,23 +170,27 @@ class PlotScreen:
     def draw_err_msg(self):
         error_surface = pg.Surface(ERROR_SURFACE_SIZE)
         error_surface.fill(pg.color.THECOLORS['darkslategray'])
-        error_surface_position = (SCREEN_SIZE[0] // 2 - ERROR_SURFACE_SIZE[0] // 2, SCREEN_SIZE[1] // 2 - ERROR_SURFACE_SIZE[1] // 2)
+        error_surface_position = (
+        SCREEN_SIZE[0] // 2 - ERROR_SURFACE_SIZE[0] // 2, SCREEN_SIZE[1] // 2 - ERROR_SURFACE_SIZE[1] // 2)
         self.screen.blit(error_surface, error_surface_position)
 
         text_surface = pg.font.Font(FONT_NAME, 23).render(self.err_msg, True, pg.color.THECOLORS['white'])
         text_rect = text_surface.get_rect()
-        text_rect.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + ERROR_SURFACE_SIZE[1] // 6)
+        text_rect.center = (
+        error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + ERROR_SURFACE_SIZE[1] // 6)
         self.screen.blit(text_surface, text_rect)
 
         font = pg.font.Font(FONT_NAME, 20)
         text_surface = font.render("OK", True, pg.color.THECOLORS['white'])
         text_location = text_surface.get_rect()
-        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
+        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2,
+                                error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
 
         self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
         self.ok_button.draw_border(self.screen, pg.color.THECOLORS['white'])
         text_location = text_surface.get_rect()
-        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
+        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2,
+                                error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
 
         self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
         self.ok_button.draw_border(self.screen, pg.color.THECOLORS['white'])

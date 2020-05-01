@@ -5,6 +5,7 @@ from gui_components import parser
 from gui_components.InstructionsScreen import InstructionsScreen
 from gui_components.PlotScreen import PlotScreen
 
+
 class TextBoxesIDs(Enum):
     function_id_tb = 0
     minimum_id_tb = 1
@@ -118,28 +119,31 @@ class DrawScreen:
     def draw_err_msg(self):
         error_surface = pg.Surface(ERROR_SURFACE_SIZE)
         error_surface.fill(pg.color.THECOLORS['darkslategray'])
-        error_surface_position = (SCREEN_SIZE[0] // 2 - ERROR_SURFACE_SIZE[0] // 2, SCREEN_SIZE[1] // 2 - ERROR_SURFACE_SIZE[1] // 2)
+        error_surface_position = (
+        SCREEN_SIZE[0] // 2 - ERROR_SURFACE_SIZE[0] // 2, SCREEN_SIZE[1] // 2 - ERROR_SURFACE_SIZE[1] // 2)
         self.screen.blit(error_surface, error_surface_position)
 
         text_surface = pg.font.Font(FONT_NAME, 23).render(self.err_msg, True, pg.color.THECOLORS['white'])
         text_rect = text_surface.get_rect()
-        text_rect.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + ERROR_SURFACE_SIZE[1] // 6)
+        text_rect.center = (
+        error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + ERROR_SURFACE_SIZE[1] // 6)
         self.screen.blit(text_surface, text_rect)
 
         font = pg.font.Font(FONT_NAME, 20)
         text_surface = font.render("OK", True, pg.color.THECOLORS['white'])
         text_location = text_surface.get_rect()
-        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
+        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2,
+                                error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
 
         self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
         self.ok_button.draw_border(self.screen, pg.color.THECOLORS['white'])
         text_location = text_surface.get_rect()
-        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
+        text_location.center = (error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2,
+                                error_surface_position[1] + int(ERROR_SURFACE_SIZE[1] * 80 / 100))
 
         self.ok_button = Button(OK_BUTTON_NAME, text_surface, text_location, border_width=5)
         self.ok_button.draw_border(self.screen, pg.color.THECOLORS['white'])
         self.screen.blit(self.ok_button.surface, self.ok_button.rect)
-
 
     def draw_buttons(self):
         for button in self.buttons:
@@ -176,7 +180,6 @@ class DrawScreen:
                                     elif button.name == GENERATE_GRAPH_BUTTON_NAME:
                                         graph_drawing = False
                                         plot_mode = True
-                                        ### There is no function that sets self.error for the plot button
                                         if self.error:
                                             graph_drawing = False
                                             instructions = False

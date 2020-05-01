@@ -2,6 +2,7 @@ import pygame as pg
 from tkinter import *
 from tkinter import filedialog
 
+
 class Export:
     @staticmethod
     def save_plot_as_image(path, surface):
@@ -35,13 +36,14 @@ class Export:
         root = Tk()
         root.withdraw()
         root.filename = filedialog.asksaveasfilename(initialdir="/", title="Select file", defaultextension="*.*",
-                                                     filetypes=(("CSV", ".csv"), ))
+                                                     filetypes=(("CSV", ".csv"),))
 
         if root.filename:
             Export.save_plot_as_text(root.filename, x_values, y_values)
             return True
 
         return False
+
 
 if __name__ == "__main__":
     pass
