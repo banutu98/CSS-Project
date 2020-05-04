@@ -59,8 +59,8 @@ def check_expression_validity(expression: str) -> bool:
     integral_expr = get_integral_inside_expression(expression)
     if integral_expr != '':
         expression = integral_expr
-    if expression.startswith('integral'):
-        expression = expression.lstrip('integral')
+    if expression.startswith('integrala'):
+        expression = expression.lstrip('integrala')
         if len(expression) < 2:
             return False
         if expression[0] != '(' or expression[len(expression) - 1] != ')':
@@ -89,9 +89,9 @@ def check_expression_is_number(expression: str):
         return False
 
 
-if __name__ == '__main__':
-    for expr in expressions:
-        ok = check_expression_validity(expr)
-        print(expr + ' -> ' + str(ok))
-        if ok:
-            print('value: {}'.format(check_expression_validity(expr)))
+# if __name__ == '__main__':
+#     for expr in expressions:
+#         ok = check_expression_validity(expr)
+#         print(expr + ' -> ' + str(ok))
+#         if ok:
+#             print('value: {}'.format(check_expression_validity(expr)))
