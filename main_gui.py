@@ -1,3 +1,5 @@
+import pickle as pkl
+
 from gui_components.defines import *
 from gui_components.PlotMenu import PlotMenu
 from gui_components.DrawScreen import DrawScreen
@@ -6,7 +8,7 @@ from gui_components.DrawScreen import DrawScreen
 def init_screen():
     screen = pg.display.set_mode(SCREEN_SIZE)
     pg.display.set_caption(WINDOW_TITLE)
-    icon = pg.image.load('resources/bar-chart.png')
+    icon = pg.image.load(ICON_PATH)
     pg.display.set_icon(icon)
 
     menu = PlotMenu(SCREEN_SIZE, screen)
@@ -23,12 +25,16 @@ def start_gui():
     intro = True
     graph_drawing = False
     while True:
+        events_list = list()
         while intro:
             for event in pg.event.get():
+                events_list.append([event.type, event.dict])
                 if event.type == pg.QUIT:
                     exit()
                 elif event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
+                        with open(os.path.join('pygame_events', 'events_main_gui.pkl'), 'wb') as f:
+                            pkl.dump(events_list, f)
                         exit()
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
