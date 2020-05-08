@@ -45,9 +45,21 @@ class MainGuiTestCase(unittest.TestCase):
         try:
             main_gui.start_gui()
         except SystemExit:
-            self.assertEquals(main_gui.graph_drawing, True)
+            self.assertEqual(main_gui.graph_drawing, True)
         else:
             self.fail("Draw Button test failed!")
+
+    def test_main_gui_do_nothing(self):
+        global EVENTS
+        pg.event.get = MagicMock(side_effect=side_effect)
+        EVENTS.append(pg.event.Event(pg.KEYDOWN, {'key': pg.K_a, 'mod': 0}))
+        EVENTS.append(pg.event.Event(pg.KEYDOWN, {'key': pg.K_ESCAPE, 'mod': 0}))
+        try:
+            main_gui.start_gui()
+        except SystemExit:
+            self.assertEqual(main_gui.intro, True)
+        else:
+            self.fail("Do nothing test failed!")
 
 
 if __name__ == '__main__':

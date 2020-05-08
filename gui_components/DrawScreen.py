@@ -26,6 +26,9 @@ class DrawScreen:
         self.texts = []
 
         self.error = False
+        self.graph_drawing = True
+        self.instructions = False
+        self.plot_mode = False
 
     def add_button(self, font_name, font_size, button_name, text_color, center_location):
         font = pg.font.Font(font_name, font_size)
@@ -152,11 +155,8 @@ class DrawScreen:
         self.init_texts()
         self.init_text_boxes()
 
-        graph_drawing = True
-        instructions = False
-        plot_mode = False
         while True:
-            while graph_drawing:
+            while self.graph_drawing:
                 self.screen.fill(pg.color.THECOLORS['aquamarine3'])
 
                 events = pg.event.get()
@@ -174,14 +174,14 @@ class DrawScreen:
                                     if button.name == EXIT_BUTTON_NAME:
                                         exit()
                                     elif button.name == GENERATE_GRAPH_BUTTON_NAME:
-                                        graph_drawing = False
-                                        plot_mode = True
+                                        self.graph_drawing = False
+                                        self.plot_mode = True
                                         if self.error:
-                                            graph_drawing = False
-                                            instructions = False
+                                            self.graph_drawing = False
+                                            self.instructions = False
                                     elif button.name == INSTRUCTIONS_BUTTON_NAME:
-                                        graph_drawing = False
-                                        instructions = True
+                                        self.graph_drawing = False
+                                        self.instructions = True
                         else:
                             if self.ok_button.rect.collidepoint(mouse_pos):
                                 self.error = False
@@ -205,14 +205,14 @@ class DrawScreen:
                 pg.display.update()
                 self.clock.tick(30)
 
-            if instructions:
+            if self.instructions:
                 InstructionsScreen().run()
 
-            if plot_mode:
+            if self.plot_mode:
                 if self.check_valid_input():
                     inputs = self.get_input()
                     PlotScreen(inputs).run()
 
-            graph_drawing = True
-            instructions = False
-            plot_mode = False
+            self.graph_drawing = True
+            self.instructions = False
+            self.plot_mode = False
