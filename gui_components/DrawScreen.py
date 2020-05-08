@@ -94,10 +94,6 @@ class DrawScreen:
         if not is_ok:
             self.set_err_msg('The mathematical expression is invalid!')
             return False
-        # expr = parser.expr_to_lamda(function_input)
-        # value = expr(minimum_value)
-        # print('ok: {}'.format(value))
-        # print('ok: {}'.format(value))
         return True
 
     def get_input(self):

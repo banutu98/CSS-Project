@@ -4,6 +4,9 @@ from gui_components.defines import *
 from gui_components.PlotMenu import PlotMenu
 from gui_components.DrawScreen import DrawScreen
 
+intro = True
+graph_drawing = False
+
 
 def init_screen():
     screen = pg.display.set_mode(SCREEN_SIZE)
@@ -19,11 +22,10 @@ def init_screen():
 
 
 def start_gui():
+    global intro, graph_drawing
     pg.init()
     menu = init_screen()
 
-    intro = True
-    graph_drawing = False
     while True:
         events_list = list()
         while intro:
@@ -33,8 +35,6 @@ def start_gui():
                     exit()
                 elif event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
-                        with open(os.path.join('pygame_events', 'events_main_gui.pkl'), 'wb') as f:
-                            pkl.dump(events_list, f)
                         exit()
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     mouse_pos = event.pos
