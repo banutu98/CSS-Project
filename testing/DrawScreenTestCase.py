@@ -46,6 +46,17 @@ class MyTestCase(unittest.TestCase):
         else:
             self.fail("Draw Button test failed!")
 
+    def test_draw_screen_set_err_msg(self):
+        self.draw_screen.set_err_msg('error')
+        self.assertEqual(self.draw_screen.err_msg, 'error')
+
+    def test_draw_screen_draw_err_msg(self):
+        self.draw_screen.set_err_msg('error')
+        try:
+            self.draw_screen.draw_err_msg()
+        except Exception:
+            self.fail('Draw error message failed!')
+
 
 if __name__ == '__main__':
     unittest.main()
