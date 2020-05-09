@@ -2,7 +2,7 @@ import unittest
 
 from unittest.mock import MagicMock
 from gui_components.defines import *
-from main_gui import MainGui
+from gui_components.main_gui import MainGui
 
 EVENTS = []
 

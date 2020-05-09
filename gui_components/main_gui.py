@@ -1,5 +1,3 @@
-import pickle as pkl
-
 from gui_components.defines import *
 from gui_components.PlotMenu import PlotMenu
 from gui_components.DrawScreen import DrawScreen
