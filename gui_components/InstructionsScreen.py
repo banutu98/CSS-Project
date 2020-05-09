@@ -1,6 +1,6 @@
 from gui_components.defines import *
 from gui_components.utils import Button
-
+import os
 
 class InstructionsScreen:
 
@@ -54,7 +54,7 @@ class InstructionsScreen:
         text_rect = text_surface.get_rect()
         text_rect.topleft = (50, 300)
         self.texts.append((text_surface, text_rect))
-        self.texts.append((text_surface, text_rect))    # double append for bold effect
+        self.texts.append((text_surface, text_rect))  # double append for bold effect
 
         text_surface = pg.font.Font(TEXTBOX_FONT_NAME, 18).render('* Function: cos(x) , Min: -7, Max: -2.3, Step: 0.5',
                                                                   True, pg.color.THECOLORS['black'])
@@ -64,7 +64,7 @@ class InstructionsScreen:
         self.texts.append((text_surface, text_rect))
 
         text_surface = pg.font.Font(TEXTBOX_FONT_NAME, 18).render('* Function: integrala(sin(x)), Min: 1, Max: 10, Step: 1',
-                                                                  True, pg.color.THECOLORS['black'])
+            True, pg.color.THECOLORS['black'])
         text_rect = text_surface.get_rect()
         text_rect.topleft = (50, 400)
         self.texts.append((text_surface, text_rect))
@@ -82,6 +82,14 @@ class InstructionsScreen:
             self.screen.blit(button.surface, button.rect)
             if button.border_width:
                 button.draw_border(self.screen, pg.color.THECOLORS['black'])
+
+    def update_texts_and_finish_loop(self):
+        for text in self.texts:
+            self.screen.blit(text[0], text[1])
+        self.draw_buttons()
+
+        pg.display.update()
+        self.clock.tick(30)
 
     def run(self):
         self.init_buttons()
@@ -104,9 +112,8 @@ class InstructionsScreen:
                                 exit()
                             elif button.name == BACK_BUTTON_NAME:
                                 return
-            for text in self.texts:
-                self.screen.blit(text[0], text[1])
-            self.draw_buttons()
+            self.update_texts_and_finish_loop()
 
-            pg.display.update()
-            self.clock.tick(30)
+
+if __name__ == '__main__':
+    InstructionsScreen().run()
