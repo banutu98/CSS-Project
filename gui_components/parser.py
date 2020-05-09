@@ -40,8 +40,8 @@ def _check_res(expression, x):
 
 
 def get_integral_inside_expression(expression: str) -> str:
-    if expression.startswith('integral'):
-        expression = expression.lstrip('integral')
+    if expression.startswith('integrala'):
+        expression = expression.lstrip('integrala')
         if len(expression) < 2:
             return ''
         if expression[0] != '(' or expression[len(expression) - 1] != ')':
@@ -59,14 +59,6 @@ def check_expression_validity(expression: str) -> bool:
     integral_expr = get_integral_inside_expression(expression)
     if integral_expr != '':
         expression = integral_expr
-    if expression.startswith('integrala'):
-        expression = expression.lstrip('integrala')
-        if len(expression) < 2:
-            return False
-        if expression[0] != '(' or expression[len(expression) - 1] != ')':
-            return False
-        expression = expression[1:]
-        expression = expression[:len(expression) - 1]
 
     split_expr = checking_regex.split(expression)
     for token in split_expr:
