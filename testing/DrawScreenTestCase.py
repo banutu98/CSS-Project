@@ -11,7 +11,7 @@ def side_effect():
     return EVENTS
 
 
-class MyTestCase(unittest.TestCase):
+class DrawScreenTestCase(unittest.TestCase):
 
     def setUp(self) -> None:
         self.draw_screen = DrawScreen()
