@@ -18,12 +18,14 @@ class MainGuiTestCase(unittest.TestCase):
 
     def test_main_gui_escape(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.KEYDOWN, {'key': pg.K_ESCAPE, 'mod': 0}))
         self.assertRaises(SystemExit, main_gui.start_gui)
 
     def test_main_gui_exit_button(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN,
                                      {'pos': (SCREEN_SIZE[0] // 2, SCREEN_SIZE[1] - 75), 'button': 1}))
@@ -31,12 +33,14 @@ class MainGuiTestCase(unittest.TestCase):
 
     def test_main_gui_quit_event(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.QUIT, {}))
         self.assertRaises(SystemExit, main_gui.start_gui)
 
     def test_main_gui_draw_button(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN,
                                      {'pos': (SCREEN_SIZE[0] // 2, SCREEN_SIZE[1] - 150), 'button': 1}))
@@ -51,6 +55,7 @@ class MainGuiTestCase(unittest.TestCase):
 
     def test_main_gui_do_nothing(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.KEYDOWN, {'key': pg.K_a, 'mod': 0}))
         EVENTS.append(pg.event.Event(pg.KEYDOWN, {'key': pg.K_ESCAPE, 'mod': 0}))

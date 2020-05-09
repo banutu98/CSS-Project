@@ -18,24 +18,28 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_screen_escape(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.KEYDOWN, {'key': pg.K_ESCAPE, 'mod': 0}))
         self.assertRaises(SystemExit, self.draw_screen.run)
 
     def test_draw_screen_quit_event(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.QUIT, {}))
         self.assertRaises(SystemExit, self.draw_screen.run)
 
     def test_draw_screen_exit_button(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN, {'pos': (730, 570), 'button': 1}))
         self.assertRaises(SystemExit, self.draw_screen.run)
 
     def test_draw_screen_instructions_button(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN, {'pos': (110, 570), 'button': 1}))
         EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN, {'pos': (730, 570), 'button': 1}))
@@ -94,6 +98,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_screen_generate_graph_no_error(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN, {'pos': (110, 270), 'button': 1}))
         try:
@@ -105,6 +110,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_screen_generate_graph_error(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN, {'pos': (110, 270), 'button': 1}))
         try:
@@ -117,6 +123,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_screen_go_to_instructions(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.QUIT, {}))
         self.draw_screen.graph_drawing = False
@@ -125,6 +132,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_draw_screen_go_to_plot(self):
         global EVENTS
+        EVENTS = list()
         pg.event.get = MagicMock(side_effect=side_effect)
         EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN, {'pos': (10, 50), 'button': 1}))
         for key, value in {pg.K_x: 'x', pg.K_MINUS: '-', pg.K_7: '7'}.items():
