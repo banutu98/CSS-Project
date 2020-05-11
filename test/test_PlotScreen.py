@@ -13,27 +13,34 @@ from tkinter import filedialog
 
 EVENTS = []
 
+
 def side_effect():
     return EVENTS
+
 
 def side_effect_png(initialdir, title, defaultextension, filetypes):
     return "surface.png"
 
+
 def side_effect_txt(initialdir, title, defaultextension, filetypes):
     return "values.csv"
+
 
 def side_effect_null_path(initialdir, title, defaultextension, filetypes):
     return ""
 
+
 def allclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     return all([math.isclose(ai, bi)
                 for ai, bi in zip(a, b)])
+
 
 class Buttons(enum.IntEnum):
     EXIT_BUTTON = 0
     BACK_BUTTON = 1
     EXPORT_TXT_BUTTON = 2
     EXPORT_PNG_BUTTON = 3
+
 
 class PlotScreenTestCase(unittest.TestCase):
 
@@ -156,7 +163,7 @@ class PlotScreenTestCase(unittest.TestCase):
         plot_window = PlotScreen(inputs)
         points = plot_window.get_points()
         x, y_test = list(zip(*points))
-        y_true = list(map(lambda x: x**2, x))
+        y_true = list(map(lambda x: x ** 2, x))
         self.assertTrue(allclose(y_true, y_test))
 
     def test_log(self):
@@ -193,7 +200,7 @@ class PlotScreenTestCase(unittest.TestCase):
         step = inputs['step']
         for x_start in x:
             y = integral(integrated_func, x_start - step, x_start,
-                        nr_rectangles=NR_RECTANGLES)
+                         nr_rectangles=NR_RECTANGLES)
             y_true.append(y)
         self.assertTrue(allclose(y_true, y_test))
 
@@ -304,6 +311,7 @@ class PlotScreenTestCase(unittest.TestCase):
             plot_screen.run()
         except SystemExit:
             self.assertFalse(plot_screen.error)
+
 
 if __name__ == '__main__':
     unittest.main()

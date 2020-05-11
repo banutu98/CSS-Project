@@ -71,6 +71,15 @@ class MainGuiTestCase(unittest.TestCase):
         else:
             self.fail("Do nothing test failed!")
 
+    def test_main_gui_menu_draw(self):
+        global EVENTS
+        EVENTS = [pg.event.Event(pg.QUIT, {})]
+        pg.init()
+        self.main_gui = MainGui()
+        self.main_gui.init_screen()
+        self.main_gui.menu.draw()
+        self.assertEqual(self.main_gui.intro, True)
+
 
 if __name__ == '__main__':
     unittest.main()

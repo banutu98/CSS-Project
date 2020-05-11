@@ -8,6 +8,7 @@ class MainGui:
     def __init__(self):
         self.intro = True
         self.graph_drawing = False
+        self.menu = None
 
     def init_screen(self):
         screen = pg.display.set_mode(SCREEN_SIZE)
@@ -19,11 +20,11 @@ class MainGui:
         menu.add_element(MENU_TITLE, 60, (SCREEN_SIZE[0] // 2, SCREEN_SIZE[1] // 6))
         menu.add_button(DRAW_BUTTON_NAME, 30, (SCREEN_SIZE[0] // 2, SCREEN_SIZE[1] - 150))
         menu.add_button(EXIT_BUTTON_NAME, 30, (SCREEN_SIZE[0] // 2, SCREEN_SIZE[1] - 75))
-        return menu
+        self.menu = menu
 
     def start_gui(self):
         pg.init()
-        menu = self.init_screen()
+        self.init_screen()
 
         while True:
             events_list = list()
@@ -37,14 +38,14 @@ class MainGui:
                             exit()
                     elif event.type == pg.MOUSEBUTTONDOWN:
                         mouse_pos = event.pos
-                        for button in menu.buttons:
+                        for button in self.menu.buttons:
                             if button.rect.collidepoint(mouse_pos):
                                 if button.name == EXIT_BUTTON_NAME:
                                     exit()
                                 elif button.name == DRAW_BUTTON_NAME:
                                     self.intro = False
                                     self.graph_drawing = True
-                menu.draw()
+                self.menu.draw()
             if self.graph_drawing:
                 DrawScreen().run()
             self.intro = True

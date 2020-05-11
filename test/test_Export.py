@@ -6,14 +6,18 @@ from tkinter import *
 from tkinter import filedialog
 from unittest.mock import MagicMock
 
+
 def side_effect_png(initialdir, title, defaultextension, filetypes):
     return "surface.png"
+
 
 def side_effect_csv(initialdir, title, defaultextension, filetypes):
     return "values.csv"
 
+
 def side_effect_null_path(initialdir, title, defaultextension, filetypes):
     return ""
+
 
 class TestExport(unittest.TestCase):
     def test_surface_save_path(self):
