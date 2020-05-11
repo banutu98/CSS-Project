@@ -2,9 +2,8 @@ import unittest
 from math_functions.math_functions import integral
 from gui_components import parser
 
+
 class TestMathFunctions(unittest.TestCase):
-    positive_interval_value = [2.30258, 342, 1.37937, -1.38549, 20.41518]
-    negative_interval_value = [-2.30258, 342, -1.37937]
 
     def test_inverse_function_integral(self):
         function = parser.expr_to_lamda("1/x")
@@ -16,7 +15,6 @@ class TestMathFunctions(unittest.TestCase):
                                negative_interval_result, places=1)
         self.assertRaises(ZeroDivisionError, integral, function, 0, 1)
 
-
     def test_second_degree_function_integral(self):
         function = parser.expr_to_lamda("x**2 + 1")
         positive_interval_result = 342
@@ -24,7 +22,6 @@ class TestMathFunctions(unittest.TestCase):
 
         self.assertAlmostEqual(integral(function, 1, 10), positive_interval_result, places=1)
         self.assertAlmostEqual(integral(function, -10, -1), negative_interval_value, places=1)
-
 
     def test_sin_function_integral(self):
         function = parser.expr_to_lamda("sin(x)")
@@ -59,7 +56,6 @@ class TestMathFunctions(unittest.TestCase):
 
         ###THIS SHOULD FAIL###
         self.assertEqual(integral(function, 1, 10), "undefined")
-
 
 
 if __name__ == "__main__":
