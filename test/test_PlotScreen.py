@@ -179,9 +179,6 @@ class PlotScreenTestCase(unittest.TestCase):
         y_true = list(map(math.sin, x))
         self.assertTrue(allclose(y_true, y_test))
 
-    ###################
-    # THIS TEST FAILS #
-    ###################
     def test_integral(self):
         inputs = {
             'min': -1,
@@ -198,8 +195,8 @@ class PlotScreenTestCase(unittest.TestCase):
         y_true = []
         start = inputs['min']
         step = inputs['step']
-        for x_start in x:
-            y = integral(integrated_func, x_start - step, x_start,
+        for x_current in x[1:]:
+            y = integral(integrated_func, start, x_current,
                          nr_rectangles=NR_RECTANGLES)
             y_true.append(y)
         self.assertTrue(allclose(y_true, y_test))
