@@ -34,7 +34,7 @@ class TestExport(unittest.TestCase):
 
     def test_surface_save_missing_path(self):
         surface = pg.Surface((100, 100))
-        self.assertRaises(FileNotFoundError, Export.save_plot_as_image, "", surface)
+        self.assertRaises(pg.error, Export.save_plot_as_image, "", surface)
 
     def test_values_save_missing_path(self):
         x_values = [i for i in range(10)]
