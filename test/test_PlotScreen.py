@@ -8,11 +8,22 @@ from gui_components.PlotScreen import PlotScreen
 from gui_components.defines import *
 from gui_components import parser
 from math_functions.math_functions import integral
+from tkinter import *
+from tkinter import filedialog
 
 EVENTS = []
 
 def side_effect():
     return EVENTS
+
+def side_effect_png(initialdir, title, defaultextension, filetypes):
+    return "surface.png"
+
+def side_effect_txt(initialdir, title, defaultextension, filetypes):
+    return "values.csv"
+
+def side_effect_null_path(initialdir, title, defaultextension, filetypes):
+    return ""
 
 def allclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     return all([math.isclose(ai, bi)
@@ -185,6 +196,114 @@ class PlotScreenTestCase(unittest.TestCase):
                         nr_rectangles=NR_RECTANGLES)
             y_true.append(y)
         self.assertTrue(allclose(y_true, y_test))
+
+    def test_export_image_button(self):
+        global EVENTS
+        EVENTS = []
+        pg.event.get = MagicMock(side_effect=side_effect)
+        filedialog.asksaveasfilename = MagicMock(side_effect=side_effect_png)
+        inputs = {
+            'min': -1,
+            'max': 1,
+            'step': 0.01,
+            'func': 'sin(x)'
+        }
+        EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN,
+                                     {'pos': (140, 319), 'button': 1}))
+        EVENTS.append(pg.event.Event(pg.QUIT, {}))
+
+        plot_screen = PlotScreen(inputs)
+        try:
+            plot_screen.run()
+        except SystemExit:
+            self.assertTrue(os.path.exists("surface.png"))
+
+    def test_export_txt_button(self):
+        global EVENTS
+        EVENTS = []
+        pg.event.get = MagicMock(side_effect=side_effect)
+        filedialog.asksaveasfilename = MagicMock(side_effect=side_effect_txt)
+        inputs = {
+            'min': -1,
+            'max': 1,
+            'step': 0.01,
+            'func': 'sin(x)'
+        }
+        EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN,
+                                     {'pos': (131, 372), 'button': 1}))
+        EVENTS.append(pg.event.Event(pg.QUIT, {}))
+
+        plot_screen = PlotScreen(inputs)
+        try:
+            plot_screen.run()
+        except SystemExit:
+            self.assertTrue(os.path.exists("values.csv"))
+
+    def test_export_image_path_warning(self):
+        global EVENTS
+        EVENTS = []
+        pg.event.get = MagicMock(side_effect=side_effect)
+        filedialog.asksaveasfilename = MagicMock(side_effect=side_effect_null_path)
+        inputs = {
+            'min': -1,
+            'max': 1,
+            'step': 0.01,
+            'func': 'sin(x)'
+        }
+        EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN,
+                                     {'pos': (140, 319), 'button': 1}))
+        EVENTS.append(pg.event.Event(pg.QUIT, {}))
+
+        plot_screen = PlotScreen(inputs)
+        try:
+            plot_screen.run()
+        except SystemExit:
+            self.assertTrue(plot_screen.error)
+
+    def test_export_txt_path_warning(self):
+        global EVENTS
+        EVENTS = []
+        pg.event.get = MagicMock(side_effect=side_effect)
+        filedialog.asksaveasfilename = MagicMock(side_effect=side_effect_null_path)
+        inputs = {
+            'min': -1,
+            'max': 1,
+            'step': 0.01,
+            'func': 'sin(x)'
+        }
+        EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN,
+                                     {'pos': (131, 372), 'button': 1}))
+        EVENTS.append(pg.event.Event(pg.QUIT, {}))
+
+        plot_screen = PlotScreen(inputs)
+        try:
+            plot_screen.run()
+        except SystemExit:
+            self.assertTrue(plot_screen.error)
+
+    def test_export_path_warning_dissapear(self):
+        global EVENTS
+        EVENTS = []
+        pg.event.get = MagicMock(side_effect=side_effect)
+        filedialog.asksaveasfilename = MagicMock(side_effect=side_effect_null_path)
+        inputs = {
+            'min': -1,
+            'max': 1,
+            'step': 0.01,
+            'func': 'sin(x)'
+        }
+
+        EVENTS.append(pg.event.Event(pg.MOUSEBUTTONDOWN,
+                                     {'pos': (403, 332), 'button': 1}))
+        EVENTS.append(pg.event.Event(pg.QUIT, {}))
+
+        plot_screen = PlotScreen(inputs)
+        plot_screen.set_err_msg("Error")
+        plot_screen.draw_err_msg()
+        try:
+            plot_screen.run()
+        except SystemExit:
+            self.assertFalse(plot_screen.error)
 
 if __name__ == '__main__':
     unittest.main()
