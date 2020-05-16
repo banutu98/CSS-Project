@@ -25,6 +25,8 @@ class MainGui:
     def start_gui(self):
         pg.init()
         self.init_screen()
+        assert isinstance(self.menu, PlotMenu)
+        assert self.intro is True
 
         while True:
             events_list = list()
@@ -47,6 +49,7 @@ class MainGui:
                                     self.graph_drawing = True
                 self.menu.draw()
             if self.graph_drawing:
+                assert self.intro is False
                 DrawScreen().run()
             self.intro = True
             self.graph_drawing = False

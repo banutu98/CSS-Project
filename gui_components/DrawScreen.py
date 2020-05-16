@@ -151,9 +151,16 @@ class DrawScreen:
                 button.draw_border(self.screen, pg.color.THECOLORS['black'])
 
     def run(self):
+        assert isinstance(self.buttons, list) and len(self.buttons) == 0
         self.init_buttons()
+        assert len(self.buttons) == 3
+        assert isinstance(self.texts, list) and len(self.texts) == 0
         self.init_texts()
+        assert len(self.texts) == 4
+        assert isinstance(self.text_boxes, list) and len(self.text_boxes) == 0
         self.init_text_boxes()
+        assert len(self.text_boxes) == 4
+        assert self.graph_drawing is True
 
         while True:
             while self.graph_drawing:
@@ -198,6 +205,7 @@ class DrawScreen:
                 self.draw_buttons()
 
                 if self.error:
+                    assert self.instructions is False
                     self.draw_err_msg()
 
                 # self.draw_graph([(10, 32), (50, 60), (78, 80)])
@@ -206,11 +214,16 @@ class DrawScreen:
                 self.clock.tick(30)
 
             if self.instructions:
+                assert self.graph_drawing is False
                 InstructionsScreen().run()
 
             if self.plot_mode:
+                assert self.graph_drawing is False
                 if self.check_valid_input():
                     inputs = self.get_input()
+                    assert isinstance(inputs, dict)
+                    for field in ['min', 'max', 'step', 'func']:
+                        assert field in inputs
                     PlotScreen(inputs).run()
 
             self.graph_drawing = True
