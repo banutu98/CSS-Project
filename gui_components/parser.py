@@ -32,6 +32,7 @@ expressions = ['vasile(2+x)+5', 'x+1+2+3/5*6', 'sin(0*2)+3', 'cos(x)*5', 'cartof
 
 
 def _check_res(expression, x):
+    assert x is float or x in int
     try:
         return True, eval(expression)
     except Exception as e:
@@ -56,6 +57,7 @@ def check_expression_validity(expression: str) -> bool:
     expression = expression.replace(' ', '')  # ignore spaces
     if len(expression) == 0:
         return False
+    assert ' ' not in expression
     integral_expr = get_integral_inside_expression(expression)
     if integral_expr != '':
         expression = integral_expr
