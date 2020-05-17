@@ -4,6 +4,10 @@ from gui_components.utils import Button
 
 class PlotMenu:
     def __init__(self, screen_size, plot_display=None):
+        assert isinstance(screen_size, tuple)
+        assert len(screen_size) == 2
+        assert screen_size[0] >= 0 and screen_size[1] >= 0
+
         if plot_display:
             self.plot_display = plot_display
         else:
@@ -16,6 +20,9 @@ class PlotMenu:
 
     @staticmethod
     def get_font(font_size, font_name):
+        print(font_name)
+        assert font_size >= 0
+
         return pg.font.Font(font_name, font_size)
 
     @staticmethod
@@ -29,6 +36,11 @@ class PlotMenu:
         self.__static_elements.append((c_elem_surface, c_elem_rect))
 
     def add_button(self, text, font_size, center_location, font_name=FONT_NAME):
+        assert isinstance(text, str)
+        assert isinstance(center_location, tuple)
+        assert len(center_location) == 2
+        assert center_location[0] >= 0 and center_location[1] >= 0
+
         c_elem_surface, c_elem_rect = self.get_text_objects(text, self.get_font(font_size, font_name))
         c_elem_rect.center = center_location
         self.buttons.append(Button(text, c_elem_surface, c_elem_rect, border_width=5))
