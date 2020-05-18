@@ -210,20 +210,26 @@ class PlotScreen:
 
 
     def set_err_msg(self, err_msg):
+        assert isinstance(err_msg, str)
+
         self.error = True
         self.err_msg = err_msg
 
 
     def draw_err_msg(self):
         assert SCREEN_SIZE[0] >= 0 and SCREEN_SIZE[1] >= 0
-        assert (ERROR_SURFACE_SIZE[0] >= SCREEN_SIZE[0] and
-                ERROR_SURFACE_SIZE[1] >= SCREEN_SIZE[1])
+        assert (ERROR_SURFACE_SIZE[0] < SCREEN_SIZE[0] and
+                ERROR_SURFACE_SIZE[1] < SCREEN_SIZE[1])
 
         error_surface = pg.Surface(ERROR_SURFACE_SIZE)
         error_surface.fill(pg.color.THECOLORS['darkslategray'])
         error_surface_position = (
         SCREEN_SIZE[0] // 2 - ERROR_SURFACE_SIZE[0] // 2, SCREEN_SIZE[1] // 2 - ERROR_SURFACE_SIZE[1] // 2)
         self.screen.blit(error_surface, error_surface_position)
+
+        assert error_surface_position[0] > 0 and error_surface_position[1] > 0
+        assert error_surface_position[0] + ERROR_SURFACE_SIZE[0] < SCREEN_SIZE[0]
+        assert error_surface_position[1] + ERROR_SURFACE_SIZE[1] < SCREEN_SIZE[1]
 
         text_surface = pg.font.Font(FONT_NAME, 23).render(self.err_msg, True, pg.color.THECOLORS['white'])
         text_rect = text_surface.get_rect()
