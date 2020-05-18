@@ -34,7 +34,6 @@ class PlotScreen:
         self.plot_surface = pg.Surface((self.plot_w, self.plot_h))
         self.error = False
 
-
     def add_button(self, font_name, font_size, button_name, text_color, center_location):
         assert font_size >= 0
         assert isinstance(button_name, str)
@@ -49,13 +48,11 @@ class PlotScreen:
         text_location.center = center_location
         self.buttons.append(Button(button_name, text_surface, text_location, border_width=5))
 
-
     def init_buttons(self):
         self.add_button(FONT_NAME, 20, EXIT_BUTTON_NAME, pg.color.THECOLORS['black'], (730, 570))
         self.add_button(FONT_NAME, 20, BACK_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 570))
         self.add_button(FONT_NAME, 20, EXPORT_TXT_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 370))
         self.add_button(FONT_NAME, 20, EXPORT_PNG_BUTTON_NAME, pg.color.THECOLORS['black'], (110, 320))
-
 
     def init_texts(self):
         assert SCREEN_SIZE[0] >= 0 and SCREEN_SIZE[1] >= 0
@@ -71,13 +68,11 @@ class PlotScreen:
         # text_rect.topleft = (50, 120)
         # self.texts.append((text_surface, text_rect))
 
-
     def draw_buttons(self):
         for button in self.buttons:
             self.screen.blit(button.surface, button.rect)
             if button.border_width:
                 button.draw_border(self.screen, pg.color.THECOLORS['black'])
-
 
     def get_points(self):
         xs = []
@@ -114,7 +109,6 @@ class PlotScreen:
                 x += step
         return list(zip(xs, ys))
 
-
     def draw_axes(self, points):
         assert isinstance(points, list)
         # assert list not empty
@@ -142,7 +136,6 @@ class PlotScreen:
                          (x_start, surface_h),
                          2)
         self.screen.blit(self.plot_surface, (self.plot_x, self.plot_y))
-
 
     def plot_function(self, points):
         assert isinstance(points, list)
@@ -177,7 +170,6 @@ class PlotScreen:
                          3)
         self.screen.blit(self.plot_surface, (self.plot_x, self.plot_y))
 
-
     def draw(self):
         self.screen.fill(pg.color.THECOLORS['aquamarine3'])
         points = self.get_points()
@@ -187,7 +179,6 @@ class PlotScreen:
         for text in self.texts:
             self.screen.blit(text[0], text[1])
         self.draw_buttons()
-
 
     def zoom(self, button):
         assert button in [4, 5]
@@ -208,13 +199,11 @@ class PlotScreen:
         assert self.max_v > self.min_v
         assert self.step >= 0.0
 
-
     def set_err_msg(self, err_msg):
         assert isinstance(err_msg, str)
 
         self.error = True
         self.err_msg = err_msg
-
 
     def draw_err_msg(self):
         assert SCREEN_SIZE[0] >= 0 and SCREEN_SIZE[1] >= 0
@@ -224,7 +213,7 @@ class PlotScreen:
         error_surface = pg.Surface(ERROR_SURFACE_SIZE)
         error_surface.fill(pg.color.THECOLORS['darkslategray'])
         error_surface_position = (
-        SCREEN_SIZE[0] // 2 - ERROR_SURFACE_SIZE[0] // 2, SCREEN_SIZE[1] // 2 - ERROR_SURFACE_SIZE[1] // 2)
+            SCREEN_SIZE[0] // 2 - ERROR_SURFACE_SIZE[0] // 2, SCREEN_SIZE[1] // 2 - ERROR_SURFACE_SIZE[1] // 2)
         self.screen.blit(error_surface, error_surface_position)
 
         assert error_surface_position[0] > 0 and error_surface_position[1] > 0
@@ -234,7 +223,8 @@ class PlotScreen:
         text_surface = pg.font.Font(FONT_NAME, 23).render(self.err_msg, True, pg.color.THECOLORS['white'])
         text_rect = text_surface.get_rect()
         text_rect.center = (
-        error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2, error_surface_position[1] + ERROR_SURFACE_SIZE[1] // 6)
+            error_surface_position[0] + ERROR_SURFACE_SIZE[0] // 2,
+            error_surface_position[1] + ERROR_SURFACE_SIZE[1] // 6)
         self.screen.blit(text_surface, text_rect)
 
         font = pg.font.Font(FONT_NAME, 20)
@@ -253,10 +243,11 @@ class PlotScreen:
         self.ok_button.draw_border(self.screen, pg.color.THECOLORS['white'])
         self.screen.blit(self.ok_button.surface, self.ok_button.rect)
 
-
     def run(self):
         self.init_buttons()
+        assert len(self.buttons) == 4
         self.init_texts()
+        assert len(self.texts) == 1
         self.draw()
         while True:
             events = pg.event.get()

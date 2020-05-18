@@ -84,16 +84,20 @@ class InstructionsScreen:
                 button.draw_border(self.screen, pg.color.THECOLORS['black'])
 
     def update_texts_and_finish_loop(self):
+        assert len(self.texts) == 12 and len(self.buttons) == 2
         for text in self.texts:
             self.screen.blit(text[0], text[1])
         self.draw_buttons()
+        assert len(self.buttons) == 2
 
         pg.display.update()
         self.clock.tick(30)
 
     def run(self):
         self.init_buttons()
+        assert len(self.buttons) == 2
         self.init_texts()
+        assert len(self.texts) == 12
         while True:
             self.screen.fill(pg.color.THECOLORS['aquamarine3'])
 

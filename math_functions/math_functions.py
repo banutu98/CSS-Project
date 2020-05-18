@@ -12,17 +12,15 @@ def integral(func, lower_bound, upper_bound, nr_rectangles=10000):
     assert isinstance(lower_bound, float)
     assert isinstance(upper_bound, float)
     assert upper_bound > lower_bound
+    assert nr_rectangles == NR_RECTANGLES
 
     integral_result = 0
     rectangle_width = (upper_bound - lower_bound) / nr_rectangles
 
     assert rectangle_width > 0
-
     for i in range(nr_rectangles):
         x = lower_bound + i * rectangle_width
         integral_result += rectangle_width * func(x)
-
-    assert i == NR_RECTANGLES - 1
 
     return integral_result
 

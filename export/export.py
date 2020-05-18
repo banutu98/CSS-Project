@@ -4,7 +4,6 @@ from tkinter import *
 from tkinter import filedialog
 
 
-
 class Export:
     @staticmethod
     def save_plot_as_image(path, surface):

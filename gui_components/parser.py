@@ -32,7 +32,7 @@ expressions = ['vasile(2+x)+5', 'x+1+2+3/5*6', 'sin(0*2)+3', 'cos(x)*5', 'cartof
 
 
 def _check_res(expression, x):
-    assert x is float or x in int
+    assert isinstance(x, float) or isinstance(x, int)
     try:
         return True, eval(expression)
     except Exception as e:

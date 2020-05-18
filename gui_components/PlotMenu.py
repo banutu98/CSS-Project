@@ -20,7 +20,6 @@ class PlotMenu:
 
     @staticmethod
     def get_font(font_size, font_name):
-        print(font_name)
         assert font_size >= 0
 
         return pg.font.Font(font_name, font_size)
@@ -49,6 +48,7 @@ class PlotMenu:
         self.plot_display.fill(pg.color.THECOLORS['aquamarine3'])
         for c_elem_surface, c_elem_rect in self.__static_elements:
             self.plot_display.blit(c_elem_surface, c_elem_rect)
+        assert len(self.buttons) == 2
         for button in self.buttons:
             self.plot_display.blit(button.surface, button.rect)
             if button.border_width:
